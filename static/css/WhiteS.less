@@ -1,0 +1,366 @@
+/**
+ *  全局样式
+ */
+// 样式重置
+* {
+    border: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+// 阻止选中
+.ws-global-selectno{
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Chrome/Safari/Opera */
+    -khtml-user-select: none; /* Konqueror */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; 
+}
+/**
+ * ========================
+ * 组件
+ *========================
+ */
+@mainColor: #3892d3;
+/**
+ * loading
+ */
+.ws-loading-box{
+    z-index: 10;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top:0px;
+    left:0px;
+    .ws-global-selectno;
+}
+.ws-loading {
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  margin-left: 10%;
+  transform: translate3d(-50%, -50%, 0);
+}
+.ws-loading-dot {
+  width: 24px;
+  height: 24px;
+  background: #3ac;
+  border-radius: 100%;
+  display: inline-block;
+  animation: wsSlide 1s infinite;
+}
+.ws-loading-dot:nth-child(1) {
+  animation-delay: 0.1s;
+  background: #32aacc;
+}
+.ws-loading-dot:nth-child(2) {
+  animation-delay: 0.2s;
+  background: #64aacc;
+}
+.ws-loading-dot:nth-child(3) {
+  animation-delay: 0.3s;
+  background: #96aacc;
+}
+.ws-loading-dot:nth-child(4) {
+  animation-delay: 0.4s;
+  background: #c8aacc;
+}
+.ws-loading-dot:nth-child(5) {
+  animation-delay: 0.5s;
+  background: #faaacc;
+}
+@keyframes wsSlide {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+/**
+ * toast
+ */
+@keyframes wsToastIn{
+    0%{
+        transform: translateY(-50vh);
+    }
+    100%{
+        transform: translateY(0vh);
+    }
+}
+@keyframes wsToastOut{
+    0%{
+        transform: translateY(0vh);
+    }
+    100%{
+        transform: translateY(-50vh);
+    }
+}
+.ws-toast{
+    position: fixed;
+    top: 0px;
+    width: 100vw;
+    animation: wsToastIn 0.3s ease-out;
+    display: flex;
+    justify-content: center;
+    z-index: 10;
+}
+//类型
+.ws-toast-error>.ws-toast-content{
+    background-color: rgb(220,0,0);
+}
+
+.ws-toast-content{
+    color:white;
+    width: 50%;
+    border-radius:0px 0px  3px 3px;
+    padding:8px 30px;
+    border:1px solid rgba(0,0,0,0.1);
+    background-color:green;
+    text-align: center;
+}
+.ws-toast-span{
+    display: inline-block;
+    text-align: left;
+    font-size: 15px;
+    word-wrap:break-word;
+}
+// 离开动画
+.ws-toast-none{
+    animation: wsToastOut 0.35s ease-in;
+}
+/**
+ * 选择框
+ */
+.ws-input-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    > label,
+    input {
+        cursor: pointer;
+        .ws-global-selectno;
+    }
+    > input[type='checkbox'] {
+        flex-shrink: 0;
+        margin-right: 10px;
+    }
+    > label {
+        font-size: 17px;
+        color: rgba(0, 0, 0, 0.5);
+    }
+}
+input[type='checkbox'] {
+    /*同样，首先去除浏览器默认样式*/
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /*编辑我们自己的样式*/
+    width: 20px;
+    height: 20px;
+    background: transparent;
+    border: 2px solid rgba(0,0,0,0.5);
+    outline: none;
+    transition:transform 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+input[type='checkbox']:checked{
+    border:none;
+    transform: rotate(30deg);
+}
+input[type='checkbox']:after {
+    content: '';
+    box-sizing: border-box;
+    display: block;
+    width: 50%;
+    height: 90%;
+    border-bottom: 2px solid @mainColor;
+    border-right: 2px solid @mainColor;
+    /*增加动画*/
+    -webkit-transition: all ease-out 50ms;
+    -moz-transition: all ease-out 50ms;
+    transition: all ease-out 50ms;
+    opacity: 0;
+}
+input[type='checkbox']:checked:after {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    opacity: 1;
+}
+/**
+ * input
+ */
+.ws-input-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    height: 40px;
+    padding: 5px;
+    transition: 0.3s;
+    position: relative;
+    z-index: 1;
+}
+.ws-input-box{
+    position: absolute;
+    left:0px;right:0px;top:0px;bottom: 0px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    z-index: -1;
+    transition: 0.3s;
+}
+.ws-input-left {
+    flex-shrink: 0;
+    min-width: 30px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.ws-input-text input {
+    outline: none;
+    flex-grow: 1;
+    padding: 0 14px;
+    font-size: 17px;
+}
+.ws-input-text:hover >.ws-input-box{
+    border-bottom: 1px solid @mainColor;
+}
+@keyframes wsInputBoxAfter{
+    0%{width:0px;}
+    100%{width:100%}
+}
+.ws-input-text input:focus + .ws-input-box::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left:0px;
+    height: 2px;
+    width:100%;
+    background-color: @mainColor;
+    animation:wsInputBoxAfter 0.2s;
+}
+// .ws-input-text:hover {
+//     border-bottom: 1px solid @mainColor;
+// }
+/**
+ * 按钮
+ */
+.ws-button {
+    height: 40px;
+    border: 0px;
+    border-radius: 20px;
+    color: white;
+    background-image: linear-gradient(90deg, #3892d3 0%, #4ebde4 50%, #3892d3 100%);
+    background-size: 200%;
+    background-position: -100% 0;
+    transition: 0.3s;
+    box-shadow: -10px 0 20px 1px rgba(78, 189, 228, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    cursor: pointer;
+    .ws-global-selectno;
+}
+.ws-button:hover {
+    background-position: -200% 0;
+}
+.ws-button:active {
+    transform: scale(0.95);
+}
+/**
+ *  模态框
+ */ 
+//添加动效
+@keyframes wxModalShow{
+	from{opacity: 0;}
+	to{opacity: 1;}
+}
+@keyframes wxModalHidden{
+	from{opacity: 1;}
+	to{opacity: 0;}
+}
+@keyframes wxModalBoxShow{
+	from{
+        transform: translateY(30vh) scaleX(0.3);
+    }
+	to{
+        transform: translateY(0) scaleX(1);
+    }
+}
+// 基本组件
+.ws-modal{
+    z-index: 9;
+    width:100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.5);
+    position: fixed;
+    top:0px;
+    left:0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: wxModalShow 0.4s ease-in;
+    // 存放内容的div
+    .ws-modal-box{
+        //浏览器存在上边框，保持div大概在中间位置
+        margin-bottom: 15vh;
+        width:500px;
+        min-height: 200px;
+        max-height: 80vh;
+        background-color: white;
+        border-radius:3px;
+        box-shadow: 0 10px 15px 1px rgba(0,0,0,0.3);
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+        flex-direction: column;
+        animation: wxModalBoxShow 0.3s ease-in;
+        //头部标题
+        .wx-modal-head{
+            font-size: 25px;
+            padding:20px 20px;
+            padding-bottom: 10px;
+            flex-shrink: 0;
+        }
+        //modal内容
+        .wx-modal-content{
+            flex-grow: 1;
+            padding:0 20px;
+            font-size: 17px;
+        }
+        // 内容底部,用于放置按钮
+        .ws-modal-foot{
+            flex-shrink: 0;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            background-color: rgba(0,0,0,0.03);
+            padding:5px 5px;
+            // 底部按钮
+            .ws-modal-foot-item{
+                padding:10px 40px;
+                border-radius: 3px;
+                cursor: default;
+                transition: 0.3s;
+                .ws-global-selectno;
+                &:hover{
+                    background-color: rgba(0,0,0,0.08);
+                }
+                &:active{
+                    background-color: rgba(0,0,0,0.2);
+                    transform: scale(0.95);
+                }
+            }
+        } 
+    }
+}
+.ws-modal-hidden{
+    animation:wxModalHidden 0.2s;
+    opacity: 0;
+}

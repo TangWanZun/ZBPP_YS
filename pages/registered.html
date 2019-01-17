@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <link rel="stylesheet" type="text/css" href="../static/css/main.css" />
+        <link rel="stylesheet" type="text/css" href="../static/css/WhiteS.css" />
+        <script src="../static/js/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../static/js/WhiteS.js" type="text/javascript" charset="utf-8"></script>
+    </head>
+    <body>
+        <div class="main-box ">
+            <div class="main">
+                <div class="login-row">
+                    <div class="main-title">
+                        账号注册
+                    </div>
+                </div>
+                <div class="login-row">
+                    <div class="ws-input-text">
+                        <div class="ws-input-left input-img-yh">
+                        </div>
+                        <input placeholder="请输入用户名(用于登录,4到13位字母或数字组合)*" id="userCode" />
+                        <label class="ws-input-box"></label>
+                    </div>
+                </div>
+                <div class="login-row">
+                    <div class="ws-input-text">
+                        <div class="ws-input-left input-img-gs">
+                        </div>
+                        <input placeholder="请输入公司名称*" id="cmdName" />
+                        <label class="ws-input-box"></label>
+                    </div>
+                </div>
+                <div class="login-row">
+                    <div class="ws-input-text">
+                        <div class="ws-input-left input-img-js">
+                        </div>
+                        <input placeholder="请输入介绍" id="introduce" />
+                        <label class="ws-input-box"></label>
+                    </div>
+                </div>
+                <div class="login-row">
+                    <div class="ws-input-text">
+                        <div class="ws-input-left input-img-lxdh">
+                        </div>
+                        <input placeholder="请输入联系电话*" type="tel" id="tel"/>
+                        <label class="ws-input-box"></label>
+                    </div>
+                </div>
+                <div class="login-row">
+                    <div class="ws-input-text">
+                        <div class="ws-input-left input-img-dz">
+                        </div>
+                        <input placeholder="请输入所在地址" id="address" />
+                        <label class="ws-input-box"></label>
+                    </div>
+                </div>
+                <div class="login-row">
+                    <div class="ws-input-text">
+                        <div class="ws-input-left input-img-st">
+                        </div>
+                        <input type="password" placeholder="请输入密码*" id="password" />
+                        <label class="ws-input-box"></label>
+                    </div>
+                </div>
+                <div class="login-row">
+                    <div class="ws-input-text">
+                        <div class="ws-input-left input-img-st">
+                        </div>
+                        <input type="password" placeholder="请再次确认密码*" id="passwordTow" />
+                        <label class="ws-input-box"></label>
+                    </div>
+                </div>
+                <div class="login-row">
+                    <div class="ws-button" onclick="send()">
+                        确认注册
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript">
+        //
+        let code = '';
+        //确认注册按钮
+        function send(){
+            let userCode = $('#userCode').val().trim();
+            let cmdName = $('#cmdName').val().trim();
+            let introduce = $('#introduce').val().trim();
+            let tel = $('#tel').val().trim();
+            let address = $('#address').val().trim();
+            let password = $('#password').val();
+            let passwordTow = $('#passwordTow').val();
+            if(userCode.length==0){
+                $ws.toast('用户名为必填项，不能为空','error');
+                return
+            }
+            if (!/^[a-zA-Z0-9]{4,13}$/.test(userCode)) {
+                $ws.toast('用户名必须为4到13位且字母或数字的组合','error');
+                return;
+            }
+            if(cmdName.length==0){
+                $ws.toast('公司名称为必填项，不能为空','error');
+                return
+            }
+            if(tel.length==0){
+                $ws.toast('联系电话为必填项，不能为空','error');
+                return
+            }
+            if(password.length==0){
+                $ws.toast('密码为必填项，不能为空','error');
+                return
+            }
+            if(passwordTow.length==0){
+                $ws.toast('确认密码为必填项，不能为空','error');
+                return
+            }
+            if(password!==passwordTow){
+                $ws.toast('两次密码输入值不同','error');
+                return
+            }
+            $.ajax({
+                url: "../User/SubmitRegister",
+                data: {
+                    state: code,
+                    userCode:userCode,
+                    UserName: cmdName,  
+                    Introduction:introduce,
+                    Phone:tel,
+                    Address:address,
+                    Psw:password,
+                    Psw2:passwordTow
+                },
+                success() {
+                    //进入注册成功页面
+                    window.location.href = "./registeredSucces";
+                }
+            });
+        }
+        //实现回车注册
+        $(window).keydown(function(e) {
+            if (e.which == 13) {
+                send();
+                return false;
+            }
+        });
+    </script>
+</html>
