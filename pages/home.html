@@ -26,7 +26,7 @@
                             公司名称
                         </div>
                         <div class="main-text-center">
-                            <div class="main-text-content">
+                            <div class="main-text-content userInfo">
                                 广东税联科技有限公司
                             </div>
                             <div class="main-text-right">
@@ -38,7 +38,8 @@
                             介绍
                         </div>
                         <div class="main-text-center">
-                            <div class="main-text-content"> 广东税联科技有限公司是一家专注于企业财税、发票、支付业务及协同应用的集平台化研发、运营、服务于一体的创新型公司。
+                            <div class="main-text-content userInfo">
+                                广东税联科技有限公司是一家专注于企业财税、发票、支付业务及协同应用的集平台化研发、运营、服务于一体的创新型公司。
                             </div>
                             <div class="main-text-right">
                             </div>
@@ -49,7 +50,7 @@
                             联系电话
                         </div>
                         <div class="main-text-center">
-                            <div class="main-text-content">
+                            <div class="main-text-content userInfo">
                                 020-84777869
                             </div>
                             <div class="main-text-right">
@@ -61,7 +62,7 @@
                             所在地址
                         </div>
                         <div class="main-text-center">
-                            <div class="main-text-content">
+                            <div class="main-text-content userInfo">
                                 广州市番禺区大石街石北工业路644号17栋303
                             </div>
                             <div class="main-text-right">
@@ -175,8 +176,8 @@
             </div>
         </div>
     </body>
-    
-    
+
+
     <script type="text/javascript">
         let code = '';
         //点击修改密码
@@ -226,20 +227,24 @@
                         $ws.toast('请再次确认密码', 'error');
                         return
                     }
-                    if(pwd2!==pwd3){
+                    if (pwd2 !== pwd3) {
                         $ws.toast('新密码与确认密码输入不一致', 'error');
                         return;
                     }
                     $ws.ajax({
                         url: "../User/ModifyPsw",
                         data: {
-                            OldPsw:pwd1,
-                            Psw:pwd2,
-                            Psw2:pwd3
+                            OldPsw: pwd1,
+                            Psw: pwd2,
+                            Psw2: pwd3
                         },
-                        success(){
+                        success() {
                             e.close();
-                            $ws.toast('密码修改成功');
+                            $ws.toast('密码修改成功，请重新登陆', {
+                                callback: function() {
+                                    window.location.href = "../user/index";
+                                }
+                            });
                         }
                     });
                 }
@@ -247,6 +252,7 @@
         }
         //点击修改基本信息
         function modifyInfo() {
+            let userInfoArr = document.querySelectorAll('.userInfo');
             $ws.modal({
                 headText: '修改基本信息',
                 confirmText: '确定修改',
@@ -255,7 +261,7 @@
                     <div class="ws-input-text">
                         <div class="ws-input-left input-img-gs">
                         </div>
-                        <input placeholder="请输入公司名称*" id="m-cmdName" value="广东税联科技有限公司"/>
+                        <input placeholder="请输入公司名称*" id="m-cmdName" value="${userInfoArr[0].innerHTML.trim()}"/>
                         <label class="ws-input-box"></label>
                     </div>
                 </div>
@@ -263,7 +269,7 @@
                     <div class="ws-input-text">
                         <div class="ws-input-left input-img-js" >
                         </div>
-                        <input placeholder="请输入介绍" id="m-introduce" value="广东税联科技有限公司是一家专注于企业财税、发票、支付业务及协同应用的集平台化研发、运营、服务于一体的创新型公司。"/>
+                        <input placeholder="请输入介绍" id="m-introduce" value="${userInfoArr[1].innerHTML.trim()}"/>
                         <label class="ws-input-box"></label>
                     </div>
                 </div>
@@ -271,7 +277,7 @@
                     <div class="ws-input-text">
                         <div class="ws-input-left input-img-lxdh">
                         </div>
-                        <input placeholder="请输入联系电话*" id="m-phone" value="020-84777869"/>
+                        <input placeholder="请输入联系电话*" id="m-phone" value="${userInfoArr[2].innerHTML.trim()}"/>
                         <label class="ws-input-box"></label>
                     </div>
                 </div>
@@ -279,15 +285,7 @@
                     <div class="ws-input-text">
                         <div class="ws-input-left input-img-dz">
                         </div>
-                        <input placeholder="请输入所在地址"  id="m-address" value="广州市番禺区大石街石北工业路644号17栋303"/>
-                        <label class="ws-input-box"></label>
-                    </div>
-                </div>
-                <div class="login-row">
-                    <div class="ws-input-text">
-                        <div class="ws-input-left input-img-yh">
-                        </div>
-                        <input placeholder="请输入用户名*"  id="m-userCode" value="1547459632411"/>
+                        <input placeholder="请输入所在地址"  id="m-address" value="${userInfoArr[3].innerHTML.trim()}"/>
                         <label class="ws-input-box"></label>
                     </div>
                 </div>
@@ -298,17 +296,12 @@
                     let introduce = $('#m-introduce').val().trim();
                     let phone = $('#m-phone').val().trim();
                     let address = $('#m-address').val().trim();
-                    let userCode = $('#m-userCode').val();
                     if (cmdName.length == 0) {
                         $ws.toast('公司名称为必填项，不能为空', 'error');
                         return
                     }
                     if (phone.length == 0) {
                         $ws.toast('联系电话为必填项，不能为空', 'error');
-                        return
-                    }
-                    if (userCode.length == 0) {
-                        $ws.toast('用户名为必填项，不能为空', 'error');
                         return
                     }
                     $ws.ajax({
@@ -319,9 +312,12 @@
                             Introduction: introduce,
                             Phone: phone,
                             Address: address,
-                            UserCode: userCode
                         },
                         success() {
+                            userInfoArr[0].innerHTML = cmdName;
+                            userInfoArr[1].innerHTML = introduce;
+                            userInfoArr[2].innerHTML = phone;
+                            userInfoArr[3].innerHTML = address;
                             e.close();
                             $ws.toast('基本信息修改成功');
                         }
@@ -329,7 +325,7 @@
                 }
             });
         }
-        //正式重置
+        //AppSecrt密码重置-3-正式重置
         function resetSucces(AppSecret) {
             $ws.modal({
                 headText: 'AppSecret重置成功',
@@ -347,18 +343,18 @@
                 <div class="login-row">
                     <div class="ws-input-checkbox">
                         <input type="checkbox" id="checkbox" class="blue-text lighten-5"/>
-                    	<label for="checkbox">我已了解AppSecret不再存储再公众平台，并已复制保存好改AppSecret</label>
+                    	<label for="checkbox">我已了解AppSecret不再存储在公众平台，并已复制保存好该AppSecret</label>
                     </div>
                 </div>
                 `,
                 onConfirm(e) {
-                    if($('#checkbox').is(':checked')){
+                    if ($('#checkbox').is(':checked')) {
                         e.close();
                     }
                 }
             });
         }
-        //输入密码进行重置
+        //AppSecrt密码重置-2-输入密码进行重置
         function inputPassword() {
             $ws.modal({
                 headText: '请输入密码',
@@ -375,7 +371,7 @@
                 `,
                 onConfirm(e) {
                     let password = $('#input-password').val();
-                    if(password.length==0){
+                    if (password.length == 0) {
                         $ws.toast('密码不能为空', 'error');
                         return;
                     }
@@ -387,16 +383,16 @@
                         success: function(res) {
                             e.close();
                             $ws.toast('AppSecret重置成功');
-                            resetSucces('asldjkfalskdf123132');
+                            resetSucces(res.data);
                         }
                     });
                 }
             });
         }
-        //点击重置开发者密码
+        //AppSecrt密码重置-1-点击重置开发者密码
         function passwordReset() {
             $ws.modal({
-                headText: 'Appsecrt密码重置',
+                headText: 'AppSecrt密码重置',
                 confirmText: '确定重置',
                 content: `
                 <div class="modal-body">
@@ -407,7 +403,7 @@
                             你确定要重置开AppSecret吗？
                         </p>
                         <p style="color: rgba(0,0,0,0.5);">
-                            请注意：重置AppSecret立即生效，所有使用旧AppSecret的接口将立即失效。为确保公众号的正常使用，请尽快更新AppSecret信息。
+                            请注意：重置AppSecret立即生效，所有使用旧AppSecret的接口将立即失效。为确保接口的正常使用，请尽快更新AppSecret信息。
                         </p>
                     </div>
                 </div>
@@ -419,13 +415,18 @@
             });
         }
         //退出登录
-        function outLogin(){
+        function outLogin() {
             $ws.modal({
                 headText: '提示',
                 confirmText: '确定',
                 content: '确定要退出登录么',
                 onConfirm(e) {
-                    window.location.href = "./login.html";
+                    $ws.ajax({
+                        url: "../User/LoginOut",
+                        success: function(res) {
+                            window.location.href = "./login.html";
+                        }
+                    });
                 }
             });
         }

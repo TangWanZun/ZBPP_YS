@@ -11,7 +11,13 @@ window.$ws = $ws;
 /**
  * 创建一个toast
  */
-$ws.toast = function(content,toastType,timeOut=2000){
+$ws.toast = function(content,pro={}){
+    let _pro = {
+        // 类型
+        toastType:typeof pro == 'string'?pro:pro.type,
+        interval:pro.interval||2000,
+        callback:pro.callback,
+    }
     let dom = document.createElement('div');
     dom.className = 'ws-toast';
     dom.innerHTML = 
@@ -20,7 +26,7 @@ $ws.toast = function(content,toastType,timeOut=2000){
             <div class="ws-toast-span">${content}<div>
         </div>
     `;
-    switch(toastType){
+    switch(_pro.toastType){
         case 'error':dom.classList.add('ws-toast-error');break;
     }
     document.body.appendChild(dom);
@@ -28,8 +34,9 @@ $ws.toast = function(content,toastType,timeOut=2000){
         dom.classList.add('ws-toast-none');
         setTimeout(()=>{
             dom.remove();
+            _pro.callback&&_pro.callback();
         },300)
-    },timeOut+300)//这里加时间是为了除去进入的动画时间
+    },_pro.interval+300)//这里加时间是为了除去进入的动画时间
 }
 /**
  * loading
