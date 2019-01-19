@@ -21,7 +21,22 @@
  * 组件
  *========================
  */
+//主色
 @mainColor: #3892d3;
+//蒙版背景统一数据
+@keyframes wxModalShow{
+	from{opacity: 0;}
+	to{opacity: 1;}
+}
+.ws-modal-bg{
+    background-color: rgba(0,0,0,0.5);
+    position: fixed;
+    top:0px;
+    left:0px;
+    width:100vw;
+    height: 100vh;
+    animation: wxModalShow 0.4s ease-in;
+}
 /**
  * loading
  */
@@ -277,10 +292,7 @@ input[type='checkbox']:checked:after {
  *  模态框
  */ 
 //添加动效
-@keyframes wxModalShow{
-	from{opacity: 0;}
-	to{opacity: 1;}
-}
+
 @keyframes wxModalHidden{
 	from{opacity: 1;}
 	to{opacity: 0;}
@@ -296,16 +308,11 @@ input[type='checkbox']:checked:after {
 // 基本组件
 .ws-modal{
     z-index: 9;
-    width:100vw;
-    height: 100vh;
-    background-color: rgba(0,0,0,0.5);
-    position: fixed;
-    top:0px;
-    left:0px;
     display: flex;
     justify-content: center;
     align-items: center;
     animation: wxModalShow 0.4s ease-in;
+    .ws-modal-bg;
     // 存放内容的div
     .ws-modal-box{
         //浏览器存在上边框，保持div大概在中间位置
@@ -363,4 +370,144 @@ input[type='checkbox']:checked:after {
 .ws-modal-hidden{
     animation:wxModalHidden 0.2s;
     opacity: 0;
+}
+/**
+ * 侧边标签栏
+ */
+@keyframes wxSideconBoxShow{
+	from{
+        transform: translateY(100vh);
+    }
+	to{
+        transform: translateY(0);
+    }
+}
+@keyframes wxSideconBoxHidden{
+	from{
+        transform: translateY(0);
+    }
+	to{
+        transform: translateY(100vh);
+    }
+}
+.ws-sidecon{
+    position: fixed;
+    left:0px;
+    bottom: 0px;
+    width:100%;
+    padding:0 20px;
+    display: none;
+    .ws-sidecon-box{
+        animation: wxSideconBoxShow 0.3s;
+    }
+    //顶部栏
+    .ws-sidecon-head{
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        .ws-sidecon-head-close{
+            flex-shrink: 0;
+            width:50px;
+            height: 50px;
+            cursor: pointer;
+            .ws-sidecon-label-close{
+                width:100%;
+                height: 100%;
+                &::after,&::before{
+                    background-color: white;
+                    width:20px;
+                    height: 3px;
+                }
+                &:hover::before,&:hover::after{
+                    box-shadow: 0px 0px 5px 1px rgba(255,255,255,0.5);
+                }
+            }
+        }
+        //标签栏
+        .ws-sidecon-label-box{
+            flex-grow: 1;
+            position: relative;
+            display: flex;
+            @labelShowHeight:10px;
+            .ws-sidecon-label{
+                border-top:1px solid rgba(0,0,0,0.1);
+                border-left:1px solid rgba(0,0,0,0.1);
+                border-right:1px solid rgba(0,0,0,0.1);
+                padding:10px 10px @labelShowHeight+5px 20px;
+                margin-bottom: -@labelShowHeight;
+                border-radius: 5px 5px 0 0;
+                cursor: pointer;
+                background-color: white;
+                display: flex;
+                align-items: center;
+                box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.1);
+                background-color: rgb(245, 245, 245);
+                &>span{
+                    display: block;
+                }
+                
+            }
+            //选中状态
+            .ws-sidecon-label-select{
+                position: relative;
+                z-index: 2;
+                transform: translateY(-@labelShowHeight+1px);
+                box-shadow: -1px -3px 5px 1px rgba(0,0,0,0.05);
+                background-color: white;
+            }
+        }
+        .ws-sidecon-label-close{
+            transition: 0.2s;
+            width:20px;
+            height: 20px;
+            margin-left: 10px;
+            transform: rotate(45deg);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            &::after{
+                content:"";
+                position: absolute;
+                width:10px;
+                height: 2px;
+                background-color: black;
+                transform: rotate(90deg);
+                border-radius: 2px;
+                transition: 0.3;
+            }
+            &::before{
+                content:"";
+                position: absolute;
+                width:10px;
+                height: 2px;
+                background-color: black;
+                border-radius: 2px;
+                transition: 0.3;
+            }
+            &:hover::before,&:hover::after{
+                box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.5);
+            }
+        }
+    }
+    // 内容承载器
+    .ws-sidecon-content{
+        box-shadow: 0px -3px 10px 1px rgba(0,0,0,0.1);
+        border-radius: 3px;
+        border:1px solid rgba(0,0,0,0.1);
+        background-color: white;
+        height:~'calc( 100vh - 80px )';
+        position: relative;
+        padding:20px;
+        overflow: auto;
+    }
+}
+// 隐藏
+.ws-sidecon-hidden{
+    >.ws-sidecon-box{
+        animation: wxSideconBoxHidden 0.3s;
+    }
+    >.ws-modal-bg{
+        animation: wxModalHidden 0.3s;
+    }
 }

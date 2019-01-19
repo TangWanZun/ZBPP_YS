@@ -11,47 +11,51 @@ window.$ws = $ws;
 /**
  * 创建一个toast
  */
-$ws.toast = function(content,pro={}){
+$ws.toast = function(content, pro = {}) {
     let _pro = {
         // 类型
-        toastType:typeof pro == 'string'?pro:pro.type,
-        interval:pro.interval||2000,
-        callback:pro.callback,
+        toastType: typeof pro == 'string' ? pro : pro.type,
+        interval: pro.interval || 2000,
+        callback: pro.callback,
     }
     let dom = document.createElement('div');
     dom.className = 'ws-toast';
-    dom.innerHTML = 
-    `
+    dom.innerHTML =
+        `
         <div class="ws-toast-content">
             <div class="ws-toast-span">${content}<div>
         </div>
     `;
-    switch(_pro.toastType){
-        case 'error':dom.classList.add('ws-toast-error');break;
+    switch (_pro.toastType) {
+        case 'error':
+            dom.classList.add('ws-toast-error');
+            break;
     }
     document.body.appendChild(dom);
-    setTimeout(()=>{
+    setTimeout(() => {
         dom.classList.add('ws-toast-none');
-        setTimeout(()=>{
+        setTimeout(() => {
             dom.remove();
-            _pro.callback&&_pro.callback();
-        },300)
-    },_pro.interval+300)//这里加时间是为了除去进入的动画时间
+            _pro.callback && _pro.callback();
+        }, 300)
+    }, _pro.interval + 300) //这里加时间是为了除去进入的动画时间
 }
 /**
  * loading
  */
-$ws.loading = function(bool=true){
+$ws.loading = function(bool = true) {
     let node = document.getElementById('ws-loading-box-thdlx1');
-    if(bool){
+    if (bool) {
         //判断如果存在一个loading则不创建
-        if(node){return};
+        if (node) {
+            return
+        };
         //创建loading
-        var dom =  document.createElement('div');
+        var dom = document.createElement('div');
         dom.className = 'ws-loading-box';
         dom.id = 'ws-loading-box-thdlx1';
-        dom.innerHTML = 
-        `
+        dom.innerHTML =
+            `
         <div class="ws-loading">
           <div class="ws-loading-dot"></div>
           <div class="ws-loading-dot"></div>
@@ -61,9 +65,11 @@ $ws.loading = function(bool=true){
         </div>
         `;
         document.body.appendChild(dom);
-    }else{
+    } else {
         //判断如果不存在则直接退出
-        if(!node){return};
+        if (!node) {
+            return
+        };
         node.remove();
     }
 }
@@ -134,9 +140,9 @@ $ws.modal = function(pro = {}) {
         e.stopPropagation();
     })
     //点击模态框，页面消失
-//     dom.addEventListener('click', (e) => {
-//         _close();
-//     })
+    //     dom.addEventListener('click', (e) => {
+    //         _close();
+    //     })
     //点击取消按钮，页面消失
     if (_pro.isCancel) {
         dom.querySelector('.ws-modal-foot-cancel').addEventListener('click', (e) => {
@@ -150,14 +156,110 @@ $ws.modal = function(pro = {}) {
     })
 }
 /**
+ * 创建一个侧边标签栏
+ * 对象
+ */
+$ws.sidecon = {
+    dom:undefined,
+    bodyWidth:0,
+    //初始化
+    init(){
+        let me = $ws.sidecon;
+        //当前侧边标签栏只会创建一个,当已经存在的时候,则取之前创建
+        if(me.dom){
+            return me.dom;
+        }
+        //获取缓存信息
+        let bodyWidth = document.body.style.width;
+        me.bodyWidth = bodyWidth;
+        let _pro = {
+        
+        }
+        //创建一个包裹的div
+        dom = document.createElement('div');
+        dom.id = 'ws-sidecon';
+        dom.className = "ws-sidecon";
+        // 添加内部div
+        dom.innerHTML =
+            `
+            <div class="ws-modal-bg"></div>
+            <div class="ws-sidecon-box">
+                <div class="ws-sidecon-head">
+                    <div class="ws-sidecon-label-box"></div>
+                    <div class="ws-sidecon-head-close"><div class="ws-sidecon-label-close"></div></div>
+                </div>
+                <div class="ws-sidecon-content"></div>
+            </div>
+        `
+        //添加到body上面
+        document.body.appendChild(dom);
+        //固定body的宽度，保证不会因为取消滚动条而产生抖动
+        document.body.style.width = document.body.offsetWidth + 'px';
+        //锁住当前页面，防止页面滚动
+        document.body.style.overflow = 'hidden';
+        /**
+         * 添加内部事件
+         */
+        dom.querySelector('.ws-sidecon-box').addEventListener('click', e => {
+            //防止点击内部的时候页面关闭
+            //阻止、事件冒泡
+            e.stopPropagation();
+        })
+        // 点击模态框，页面消失
+        dom.querySelector('.ws-sidecon-head-close').addEventListener('click', (e) => {
+            me.close();
+        })
+        //添加到实例
+        me.dom = dom;
+        return dom;
+    },
+    //销毁侧边栏标签库
+    close(){
+        let me = $ws.sidecon;
+        me.dom.classList.add('ws-sidecon-hidden');
+        setTimeout(() => {
+            //解锁当前页面，防止页面滚动
+            document.body.style.overflow = null;
+            //取消固定body的宽度，保证不会因为添加滚动条而产生抖动
+            document.body.style.width = me.bodyWidth;
+            me.dom.remove();
+            me.dom = undefined;
+        }, 250)
+    },
+    //侧边标签库出现
+    show(){
+        let me = $ws.sidecon;
+        me.dom.style.display = "block";
+    },
+    //为侧边标签库添加新的页签
+    add(pro={}){
+        let me = $ws.sidecon;
+        let _pro = {
+            title:pro.title||'新建页签',
+            content:pro.content||''
+        }
+        //添加标签页
+        let labelBox =  me.dom.querySelector('.ws-sidecon-label-box');
+        let labelDom = document.createElement('div');
+        labelDom.className = 'ws-sidecon-label  ws-sidecon-label-select';
+        labelDom.innerHTML = `
+            <span>${_pro.title}</span><div class="ws-sidecon-label-close"></div>
+        `
+        labelBox.appendChild(labelDom);
+        //添加内容页
+        let contentDom =me.dom.querySelector('.ws-sidecon-content');
+        contentDom.innerHTML = _pro.content;
+    }
+}
+/**
  * 挂在一个jquery上面的
  */
-$ws.ajax = function(pro={}){
+$ws.ajax = function(pro = {}) {
     let _pro = {
-        url:pro.url,
-        data:pro.data,
-        success:pro.success,
-        fail:pro.fail,
+        url: pro.url,
+        data: pro.data,
+        success: pro.success,
+        fail: pro.fail,
     }
     $ws.loading(true);
     $.ajax({
@@ -166,11 +268,11 @@ $ws.ajax = function(pro={}){
         dataType: "json",
         data: _pro.data,
         success: function(res) {
-            if (res.errcode==0) {
-                _pro.success&&_pro.success(res.errmsg);
+            if (res.errcode == 0) {
+                _pro.success && _pro.success(res.errmsg);
             } else {
                 $ws.toast(res.errmsg, 'error');
-                _pro.fail&&_pro.fail();
+                _pro.fail && _pro.fail();
             }
             $ws.loading(false);
         },
@@ -180,4 +282,3 @@ $ws.ajax = function(pro={}){
         },
     });
 }
-

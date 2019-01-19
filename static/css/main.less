@@ -208,6 +208,58 @@
     font-size: 15px;
 }
 /**
+ * 表格
+ */
+.table{
+    // grid-template-columns: repeat(5 40px);
+    >table{
+        border-collapse:collapse;
+        width:100%;
+        cursor: default;
+    }
+    .table-tr{
+        transition: background-color 0.2s;
+        &:hover{
+            background-color: fadeout(@mainColor,93%);
+        }
+        >th,td{
+            border-bottom:1px solid  fadeout(@mainColor, 80%);
+            padding:0px;
+            padding:15px 10px;
+            text-align: left;
+            font-size: 15px;
+        }
+        // 按钮使用
+        .table-btn{
+            display: block;
+            color: @mainColor;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: text-shadow 0.3s;
+            &:hover{
+                text-shadow: 0px 0px 5px fadeout(@mainColor,0%);
+            }
+            &:last-child{
+                margin-bottom: 0px;
+            }
+        }
+    }
+}
+/**
+ * 分页
+ */
+.page-box{
+    display: flex;
+    margin-top: 30px;
+    >div{
+        padding: 0 20px;
+    }
+    .page-box-click{
+        cursor: pointer;
+        color: @mainColor;
+    }
+}
+/**
  * 图片使用
  */
 .input-img-gs{
