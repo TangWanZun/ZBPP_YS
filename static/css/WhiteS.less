@@ -135,7 +135,7 @@
     border-radius:0px 0px  3px 3px;
     padding:8px 30px;
     border:1px solid rgba(0,0,0,0.1);
-    background-color:green;
+    background-color:#66CD00;
     text-align: center;
 }
 .ws-toast-span{
@@ -387,7 +387,7 @@ input[type='checkbox']:checked:after {
         transform: translateY(0);
     }
 	to{
-        transform: translateY(100vh);
+        transform: translateY(~'calc( 100vh - 80px )');
     }
 }
 .ws-sidecon{
@@ -396,7 +396,7 @@ input[type='checkbox']:checked:after {
     bottom: 0px;
     width:100%;
     padding:0 20px;
-    display: none;
+    // display: none;
     .ws-sidecon-box{
         animation: wxSideconBoxShow 0.3s;
     }
@@ -430,6 +430,7 @@ input[type='checkbox']:checked:after {
             display: flex;
             @labelShowHeight:10px;
             .ws-sidecon-label{
+                .ws-global-selectno;
                 border-top:1px solid rgba(0,0,0,0.1);
                 border-left:1px solid rgba(0,0,0,0.1);
                 border-right:1px solid rgba(0,0,0,0.1);
@@ -445,7 +446,7 @@ input[type='checkbox']:checked:after {
                 &>span{
                     display: block;
                 }
-                
+                transition: transform 0.2s;
             }
             //选中状态
             .ws-sidecon-label-select{
@@ -504,6 +505,7 @@ input[type='checkbox']:checked:after {
 }
 // 隐藏
 .ws-sidecon-hidden{
+    transform: translateY(~'calc( 100vh - 80px )');
     >.ws-sidecon-box{
         animation: wxSideconBoxHidden 0.3s;
     }

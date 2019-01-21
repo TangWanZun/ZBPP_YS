@@ -160,20 +160,20 @@ $ws.modal = function(pro = {}) {
  * 对象
  */
 $ws.sidecon = {
-    dom:undefined,
-    bodyWidth:0,
+    dom: undefined,
+    bodyWidth: 0,
     //初始化
-    init(){
+    init() {
         let me = $ws.sidecon;
         //当前侧边标签栏只会创建一个,当已经存在的时候,则取之前创建
-        if(me.dom){
+        if (me.dom) {
             return me.dom;
         }
         //获取缓存信息
         let bodyWidth = document.body.style.width;
         me.bodyWidth = bodyWidth;
         let _pro = {
-        
+
         }
         //创建一个包裹的div
         dom = document.createElement('div');
@@ -205,16 +205,16 @@ $ws.sidecon = {
             //阻止、事件冒泡
             e.stopPropagation();
         })
-        // 点击模态框，页面消失
+        // 点击关闭按钮，页面进入隐藏状态
         dom.querySelector('.ws-sidecon-head-close').addEventListener('click', (e) => {
-            me.close();
+            me.hidden();
         })
         //添加到实例
         me.dom = dom;
         return dom;
     },
     //销毁侧边栏标签库
-    close(){
+    close() {
         let me = $ws.sidecon;
         me.dom.classList.add('ws-sidecon-hidden');
         setTimeout(() => {
@@ -227,29 +227,94 @@ $ws.sidecon = {
         }, 250)
     },
     //侧边标签库出现
-    show(){
+    show() {
         let me = $ws.sidecon;
         me.dom.style.display = "block";
     },
+    //隐藏侧边标签库
+    hidden() {
+        let me = $ws.sidecon;
+        me.dom.classList.add('ws-sidecon-hidden');
+        setTimeout(() => {
+            //解锁当前页面，防止页面滚动
+            document.body.style.overflow = null;
+            //取消固定body的宽度，保证不会因为添加滚动条而产生抖动
+            document.body.style.width = me.bodyWidth;
+            me.dom.classList.remove('ws-sidecon-hidden');
+            me.dom.style.display = "none";
+        }, 250)
+    },
     //为侧边标签库添加新的页签
-    add(pro={}){
+    add(pro = {}) {
         let me = $ws.sidecon;
         let _pro = {
-            title:pro.title||'新建页签',
-            content:pro.content||''
+            title: pro.title || '新建页签',
+            content: pro.content || ''
         }
         //添加标签页
-        let labelBox =  me.dom.querySelector('.ws-sidecon-label-box');
+        let labelBox = me.dom.querySelector('.ws-sidecon-label-box');
         let labelDom = document.createElement('div');
-        labelDom.className = 'ws-sidecon-label  ws-sidecon-label-select';
-        labelDom.innerHTML = `
+        //添加标签
+        labelDom.className = 'ws-sidecon-label ws-sidecon-label-select';
+        labelDom.innerHTML =
+        `
             <span>${_pro.title}</span><div class="ws-sidecon-label-close"></div>
         `
         labelBox.appendChild(labelDom);
+        //为删除页签按钮添加事件
+        labelDom.querySelector('.ws-sidecon-label-close').addEventListener('click',function(e){
+            //阻止、事件冒泡
+            e.stopPropagation();
+            me.closeLabel(e.target.parentElement)
+        })
+        //为页签按钮添加事件
+        labelDom.addEventListener('click',function(e){
+            me.labelShow(labelDom)
+        })
+        //将内容数据进行保存
+        labelDom._innerHTML = _pro.content;
+        //将数据添加到标签库中
+        let labelList =  me.dom.querySelectorAll('.ws-sidecon-label');
+        //当标签栏不止一个标签栏的时候
+        me.labelShow(labelDom);
+    },
+    //删除一个标签
+    closeLabel(dom){
+        let me = $ws.sidecon;
+        let labelList =  me.dom.querySelectorAll('.ws-sidecon-label');
+        //删除标签
+        // selectDomList[index].remove();
+        if(labelList.length<=1){
+            //当页签只剩余一个的时候，将直接清除掉侧边展示栏
+            me.close();
+        }else{
+            //当点击的就是选择页签的时候
+            if(dom.classList.contains("ws-sidecon-label-select")){
+                //当存在后一个兄弟的时候
+                if(dom.nextSibling){
+                    me.labelShow(dom.nextSibling);
+                }else{
+                    me.labelShow(dom.previousSibling);
+                }
+            }
+            //删除的为当前展示的
+            dom.remove();
+        }
+    },
+    //展示新的页签。
+    labelShow(dom){
+        let me = $ws.sidecon;
+        let selectDomList = me.dom.querySelectorAll('.ws-sidecon-label');
+        for(let i = 0;i<selectDomList.length;i++){
+            if(selectDomList[i].classList.contains("ws-sidecon-label-select")){
+                selectDomList[i].classList.remove('ws-sidecon-label-select');
+            }
+        }
+        dom.classList.add('ws-sidecon-label-select');
         //添加内容页
-        let contentDom =me.dom.querySelector('.ws-sidecon-content');
-        contentDom.innerHTML = _pro.content;
-    }
+        let contentDom = me.dom.querySelector('.ws-sidecon-content');
+        contentDom.innerHTML = dom._innerHTML;
+    },
 }
 /**
  * 挂在一个jquery上面的

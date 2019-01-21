@@ -76,7 +76,17 @@
                 $ws.toast('账号或密码不能为空','error');
                 return;
             }
-            $ws.loading();
+            if ($('#checked').is(':checked')) {
+                setCookie('user', user, 7);
+                setCookie('password', password, 7);
+                setCookie('checked', 'true', 7);
+            } else {
+                setCookie('user', null, 7);
+                setCookie('password', null, 7);
+                setCookie('checked', 'false', 7);
+            }
+            console.log('登录成功')
+            return
             $ws.ajax({
                 url: "../User/SubmitLogin",
                 data: {
@@ -101,7 +111,7 @@
         function setCookie(name, value, day) {
             var date = new Date();
             date.setDate(date.getDate() + day);
-            document.cookie = name + '=' + value + ';expires=' + date;
+            document.cookie = name + '=' + value + ';expires=' + date +';path=/';
         };
         //获取cookie
         function getCookie(name) {
