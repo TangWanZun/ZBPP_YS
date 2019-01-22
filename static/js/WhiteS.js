@@ -1,6 +1,7 @@
 /**
  * WhiteS 插件 中文译名‘留白’
  */
+
 /**
  * 用于基本使用的基础函数组
  */
@@ -8,6 +9,36 @@ let docDom = document.querySelector;
 
 let $ws = {};
 window.$ws = $ws;
+/**
+ * 功能区
+ */
+$ws.uuid = function(len, radix) {
+    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+    var uuid = [], i;
+    radix = radix || chars.length;
+ 
+    if (len) {
+      // Compact form
+      for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random()*radix];
+    } else {
+      // rfc4122, version 4 form
+      var r;
+ 
+      // rfc4122 requires these characters
+      uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+      uuid[14] = '4';
+ 
+      // Fill in random data.  At i==19 set the high bits of clock sequence as
+      // per rfc4122, sec. 4.1.5
+      for (i = 0; i < 36; i++) {
+        if (!uuid[i]) {
+          r = 0 | Math.random()*16;
+          uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+        }
+      }
+    }
+    return uuid.join('');
+}
 /**
  * 创建一个toast
  */
@@ -182,7 +213,7 @@ $ws.sidecon = {
         // 添加内部div
         dom.innerHTML =
             `
-            <div class="ws-modal-bg"></div>
+            <div class="ws-sidecon-bg"></div>
             <div class="ws-sidecon-box">
                 <div class="ws-sidecon-head">
                     <div class="ws-sidecon-label-box"></div>
@@ -229,7 +260,15 @@ $ws.sidecon = {
     //侧边标签库出现
     show() {
         let me = $ws.sidecon;
-        me.dom.style.display = "block";
+        if(me.dom.classList.contains('ws-sidecon-hidden')){
+            //没有被销毁的情况下
+            me.dom.classList.remove('ws-sidecon-hidden');
+            setTimeout(()=>{
+                me.dom.querySelector('.ws-sidecon-bg').style.display = "block";
+            },150)
+        }else{
+            me.dom.style.display = "block";
+        }
     },
     //隐藏侧边标签库
     hidden() {
@@ -240,8 +279,7 @@ $ws.sidecon = {
             document.body.style.overflow = null;
             //取消固定body的宽度，保证不会因为添加滚动条而产生抖动
             document.body.style.width = me.bodyWidth;
-            me.dom.classList.remove('ws-sidecon-hidden');
-            me.dom.style.display = "none";
+            me.dom.querySelector('.ws-sidecon-bg').style.display = "none";
         }, 250)
     },
     //为侧边标签库添加新的页签
@@ -249,7 +287,22 @@ $ws.sidecon = {
         let me = $ws.sidecon;
         let _pro = {
             title: pro.title || '新建页签',
-            content: pro.content || ''
+            content: pro.content || '',
+            id:pro.id||''
+        }
+        //当存在_pro.id的时候
+        if(_pro.id){
+            let labelList =  me.dom.querySelectorAll('.ws-sidecon-label');
+            //判断是否存在重复的_id
+            for(let i =0;i<labelList.length;i++){
+                if(labelList[i]._id==_pro.id){
+                    //表示存在重复_id
+                    //则展示词标签
+                    me.labelShow(labelList[i])
+                    //退出创建页签
+                    return _pro.id;
+                }
+            }
         }
         //添加标签页
         let labelBox = me.dom.querySelector('.ws-sidecon-label-box');
@@ -269,14 +322,18 @@ $ws.sidecon = {
         })
         //为页签按钮添加事件
         labelDom.addEventListener('click',function(e){
-            me.labelShow(labelDom)
+            me.labelShow(labelDom);
         })
         //将内容数据进行保存
         labelDom._innerHTML = _pro.content;
-        //将数据添加到标签库中
-        let labelList =  me.dom.querySelectorAll('.ws-sidecon-label');
         //当标签栏不止一个标签栏的时候
         me.labelShow(labelDom);
+        //生成一个uuid
+        let _uuid = $ws.uuid(10);
+        //给页签赋予唯一标识符
+        labelDom._id = _uuid;
+        return _uuid
+        
     },
     //删除一个标签
     closeLabel(dom){
@@ -304,6 +361,11 @@ $ws.sidecon = {
     //展示新的页签。
     labelShow(dom){
         let me = $ws.sidecon;
+        if(me.dom.classList.contains('ws-sidecon-hidden')){
+            //表示处于收起状态
+            //改变成打开状态
+            me.show();
+        }
         let selectDomList = me.dom.querySelectorAll('.ws-sidecon-label');
         for(let i = 0;i<selectDomList.length;i++){
             if(selectDomList[i].classList.contains("ws-sidecon-label-select")){

@@ -396,7 +396,11 @@ input[type='checkbox']:checked:after {
     bottom: 0px;
     width:100%;
     padding:0 20px;
+    transition: 0.2s;
     // display: none;
+    .ws-sidecon-bg{
+        .ws-modal-bg;
+    }
     .ws-sidecon-box{
         animation: wxSideconBoxShow 0.3s;
     }
@@ -505,11 +509,15 @@ input[type='checkbox']:checked:after {
 }
 // 隐藏
 .ws-sidecon-hidden{
+    // transform: translateY(50vh);
+    animation: wxSideconBoxHidden 0.3s;
     transform: translateY(~'calc( 100vh - 80px )');
     >.ws-sidecon-box{
-        animation: wxSideconBoxHidden 0.3s;
+//         animation: wxSideconBoxHidden 0.3s;
+//         transform: translateY(~'calc( 100vh - 80px )');
     }
-    >.ws-modal-bg{
-        animation: wxModalHidden 0.3s;
+    >.ws-sidecon-bg{
+        // transition: 0.3s;
+        opacity: 0;
     }
 }

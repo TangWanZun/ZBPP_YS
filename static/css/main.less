@@ -231,7 +231,7 @@
         }
         // 按钮使用
         .table-btn{
-            display: block;
+            // display: block;
             color: @mainColor;
             cursor: pointer;
             margin-bottom: 10px;
@@ -243,6 +243,29 @@
                 margin-bottom: 0px;
             }
         }
+    }
+}
+//用来展示表格更多信息的按钮
+.table-sidecon-btn{
+    display: block;
+    width:20px;
+    height: 20px;
+    background-size: 100% 100%;
+    cursor: pointer;
+    transition: 0.2s;
+}
+//激活状态
+.table-sidecon-btn-select{
+    transform: rotate(90deg);
+}
+// 提示内容
+.table-sidecon-content{
+    display: flex;
+    justify-content: space-around;
+    .table-sidecon-content-title{
+        color:@mainColor;
+        font-size: 17px;
+        margin-bottom: 10px;
     }
 }
 /**
@@ -285,4 +308,7 @@
 }
 .input-img-zccg{
     background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB0PSIxNTQ3NzA0NTc1MzY3IiBjbGFzcz0iaWNvbiIgc3R5bGU9IiIgdmlld0JveD0iMCAwIDE0MjcgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjIwNTkiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjc4LjcxMDkzNzUiIGhlaWdodD0iMjAwIj48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwvc3R5bGU+PC9kZWZzPjxwYXRoIGQ9Ik01OTEuMTg5MzMzIDk3OS44MTI4NDhhOTMuMDkwOTA5IDkzLjA5MDkwOSAwIDAgMS0xMzEuNjkyNjA2IDBMNDQuMTg3MTUyIDU2NC41MDMyNzNhOTMuMDI4ODQ4IDkzLjAyODg0OCAwIDAgMSAwLTEzMS42MzA1NDYgOTMuMDI4ODQ4IDkzLjAyODg0OCAwIDAgMSAxMzEuNjMwNTQ1IDBMNTI1LjM0MzAzIDc4Mi4zMzYgMTI1MS42MzgzMDMgNTYuMTAyNzg4YTkzLjAyODg0OCA5My4wMjg4NDggMCAwIDEgMTMxLjYzMDU0NSAwIDkzLjAyODg0OCA5My4wMjg4NDggMCAwIDEgMCAxMzEuNjMwNTQ1TDU5MS4xODkzMzMgOTc5LjgxMjg0OHoiIHAtaWQ9IjIwNjAiIGZpbGw9IiNmZmZmZmYiPjwvcGF0aD48L3N2Zz4=);
+}
+.input-img-fx{
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB0PSIxNTQ4MTM1MTczNzM4IiBjbGFzcz0iaWNvbiIgc3R5bGU9IiIgdmlld0JveD0iMCAwIDEwMDAgMTAwMCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjMyMjEiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+PGRlZnM+PHN0eWxlIHR5cGU9InRleHQvY3NzIj48L3N0eWxlPjwvZGVmcz48cGF0aCBkPSJNODE2LjcwMjgyNjY3IDQ4NC40MTQyOTMzM0w0MDguMjE2MzIgNDQuMzkxNTczMzNIMjE5Ljc0OTc0MzE1bDQwOC40ODU0NCA0NDAuMDIyNzItNDA4LjQ4NTQ0IDQwOC40Njk3NmgxODguNDY3Njc5NDJMODE2LjcwMjgyNjY3IDQ4NC40MTQyOTMzM3pNODE2LjcwMjgyNjY3IDQ4NC40MTQyOTMzMyIgcC1pZD0iMzIyMiI+PC9wYXRoPjwvc3ZnPg==)
 }
