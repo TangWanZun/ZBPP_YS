@@ -238,7 +238,9 @@ $ws.sidecon = {
         })
         // 点击关闭按钮，页面进入隐藏状态
         dom.querySelector('.ws-sidecon-head-close').addEventListener('click', (e) => {
-            me.hidden();
+            // me.hidden();
+            //因为程序在隐藏中存在BUG，暂时不启用，关闭则直接销毁
+            me.close();
         })
         //添加到实例
         me.dom = dom;
@@ -288,7 +290,8 @@ $ws.sidecon = {
         let _pro = {
             title: pro.title || '新建页签',
             content: pro.content || '',
-            id:pro.id||''
+            id:pro.id||'',
+            callback:pro.callback
         }
         //当存在_pro.id的时候
         if(_pro.id){
@@ -308,7 +311,7 @@ $ws.sidecon = {
         let labelBox = me.dom.querySelector('.ws-sidecon-label-box');
         let labelDom = document.createElement('div');
         //添加标签
-        labelDom.className = 'ws-sidecon-label ws-sidecon-label-select';
+        labelDom.className = 'ws-sidecon-label';
         labelDom.innerHTML =
         `
             <span>${_pro.title}</span><div class="ws-sidecon-label-close"></div>
@@ -326,14 +329,16 @@ $ws.sidecon = {
         })
         //将内容数据进行保存
         labelDom._innerHTML = _pro.content;
-        //当标签栏不止一个标签栏的时候
-        me.labelShow(labelDom);
+        //展示添加页的内容
+        me.labelShow(labelDom,function(contentDom){
+            //当添加新的页面完成之后，回调，参数是内容的dom元素
+            _pro.callback&&_pro.callback(contentDom)
+        });
         //生成一个uuid
         let _uuid = $ws.uuid(10);
         //给页签赋予唯一标识符
-        labelDom._id = _uuid;
-        return _uuid
-        
+        labelDom._id = _pro.id;
+        return _pro.id
     },
     //删除一个标签
     closeLabel(dom){
@@ -359,24 +364,135 @@ $ws.sidecon = {
         }
     },
     //展示新的页签。
-    labelShow(dom){
+    labelShow(dom,callback){
         let me = $ws.sidecon;
         if(me.dom.classList.contains('ws-sidecon-hidden')){
             //表示处于收起状态
             //改变成打开状态
             me.show();
         }
+        let contentDom = me.dom.querySelector('.ws-sidecon-content');
         let selectDomList = me.dom.querySelectorAll('.ws-sidecon-label');
         for(let i = 0;i<selectDomList.length;i++){
             if(selectDomList[i].classList.contains("ws-sidecon-label-select")){
+                //当前为展示页面，这个时候需要缓存页面数据
+                selectDomList[i]._innerHTML= contentDom.innerHTML;
                 selectDomList[i].classList.remove('ws-sidecon-label-select');
             }
         }
         dom.classList.add('ws-sidecon-label-select');
         //添加内容页
-        let contentDom = me.dom.querySelector('.ws-sidecon-content');
         contentDom.innerHTML = dom._innerHTML;
+        //当每次展示新的页签结束后，都会有回调函数，参数就是内容页
+        callback&&callback(contentDom)
     },
+}
+/**
+ * 创建一个翻页组件
+ */
+$ws.page = function(pro={}){
+    let _pro = {
+        el:pro.el||'',
+        url:pro.url||'',
+        data:pro.data||{},
+        callback:pro.callback,
+        start:pro.start||0,
+        limit:pro.limit||25
+    }
+    let dom = document.createElement('div');
+    dom.innerHTML=`
+        <div class="page-box">
+        <div class="page-box-click">
+            首页
+        </div>
+        <div class="page-box-click">
+            上一页
+        </div>
+        <div class="page-limit" id="ws-page-limitPage">
+            共 1 页
+        </div>
+        <div class="page-limit" id="ws-page-newPage">
+            当前为第 1 页
+        </div>
+        <div class="page-box-click">
+            下一页
+        </div>
+        <div class="page-box-click">
+            尾页
+        </div>
+    </div>
+    `
+    //全部数量
+    let total = 0;
+    //当前页数
+    let page = 1;
+    //添加回调方法
+    //改变总页数
+    function selectTotal(callTotal){
+        total = callTotal;
+        dom.querySelector('#ws-page-limitPage').innerHTML = `共 ${  Math.ceil(callTotal/_pro.limit)} 页`;
+    }
+    //改变当前页数
+    function selectPage(callPage){
+        page = callPage;
+        dom.querySelector('#ws-page-newPage').innerHTML = `当前为第 ${callPage} 页`;
+    }
+    //首先将会先运行一次回调
+    _pro.callback({
+        start:_pro.start,
+        limit:_pro.limit
+    },function(callTotal){
+        //获取全部数据
+        selectTotal(callTotal);
+        //添加内部方法
+        let clickList =  dom.querySelectorAll('.page-box-click'); 
+        //首页
+        clickList[0].addEventListener('click',()=>{
+            //更新页面
+            _pro.start = 0;
+            selectPage(1);
+            _pro.callback({
+                start:_pro.start,
+                limit:_pro.limit
+            },selectTotal)
+        })
+        //上一页
+        clickList[1].addEventListener('click',()=>{
+            //更新页面
+            _pro.start -= _pro.limit;
+            selectPage(page-1);
+            _pro.callback({
+                start:_pro.start,
+                limit:_pro.limit
+            },selectTotal)
+        })
+        //下一页
+        clickList[2].addEventListener('click',()=>{
+            //更新页面
+            _pro.start += _pro.limit;
+            selectPage(page+1);
+            _pro.callback({
+                start:_pro.start,
+                limit:_pro.limit
+            },selectTotal)
+        })
+        //尾页
+        clickList[3].addEventListener('click',()=>{
+            //更新页面
+            _pro.start += _pro.limit;
+            selectPage(Math.ceil(callTotal/_pro.limit));
+            _pro.callback({
+                start:_pro.start,
+                limit:_pro.limit
+            },selectTotal)
+        })
+    })
+    //将创建好的翻页组件添加到el当中区
+    if(typeof _pro.el == 'string'){
+        document.querySelector(_pro.el).appendChild(dom);
+    }else{
+        _pro.el.appendChild(dom);
+    }
 }
 /**
  * 挂在一个jquery上面的
@@ -409,3 +525,4 @@ $ws.ajax = function(pro = {}) {
         },
     });
 }
+

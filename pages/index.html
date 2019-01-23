@@ -39,96 +39,102 @@
                     </div>
                 </div>
                 <div class="login-row">
-                    <div class="ws-button" onclick="send()">
+                    <div class="ws-button" id="sendBut">
                         点击登录
                     </div>
                 </div>
                 <div class="log-bottom">
-                    <a href="registered.html">点击注册</a><a href="#" onclick="wjmm()">忘记密码</a>
+                    <a href="registered.html">点击注册</a><a href="#" id="wjmm">忘记密码</a>
                 </div>
             </div>
         </div>
     </body>
     <script type="text/javascript">
-        // 忘记密码
-        function wjmm() {
-            $ws.modal({
-                headText: '忘记密码',
-                confirmText: '关闭窗口',
-                isCancel: false,
-                content: '请联系公司管理员，公司管理员在核实之后会将密码修改链接发送至指定邮箱',
-                onConfirm(e) {
-                    e.close();
-                }
-            });
-        }
-        //获取cooker值
-        if (getCookie('checked') === 'true') {
-            $('#checked').prop('checked',true);
-            $('#user').val(getCookie('user'))
-            $('#password').val(getCookie('password'))
-        }
-        //登录
-        function send() {
-            let user = $('#user').val().trim();
-            let password = $('#password').val();
-            if (user.length == 0 || password.length == 0) {
-                $ws.toast('账号或密码不能为空','error');
-                return;
-            }
-            if ($('#checked').is(':checked')) {
-                setCookie('user', user, 7);
-                setCookie('password', password, 7);
-                setCookie('checked', 'true', 7);
-            } else {
-                setCookie('user', null, 7);
-                setCookie('password', null, 7);
-                setCookie('checked', 'false', 7);
-            }
-            console.log('登录成功')
-            return
-            $ws.ajax({
-                url: "../User/SubmitLogin",
-                data: {
-                    UserCode: user,
-                    Psw: password
-                },
-                success(){
-                    if ($('#checked').is(':checked')) {
-                        setCookie('user', user, 7);
-                        setCookie('password', password, 7);
-                        setCookie('checked', 'true', 7);
-                    } else {
-                        setCookie('user', null, 7);
-                        setCookie('password', null, 7);
-                        setCookie('checked', 'false', 7);
+        (($ws,$)=>{
+            //添加点击登录事件
+            $('#sendBut').on('click',send);
+            //添加忘记密码事件
+            $('#wjmm').on('click',wjmm);
+            // 忘记密码
+            function wjmm() {
+                $ws.modal({
+                    headText: '忘记密码',
+                    confirmText: '关闭窗口',
+                    isCancel: false,
+                    content: '请联系公司管理员，公司管理员在核实之后会将密码修改链接发送至指定邮箱',
+                    onConfirm(e) {
+                        e.close();
                     }
-                    window.location.href = "../user/index";
+                });
+            }
+            //获取cooker值
+            if (getCookie('checked') === 'true') {
+                $('#checked').prop('checked',true);
+                $('#user').val(getCookie('user'))
+                $('#password').val(getCookie('password'))
+            }
+            //登录
+            function send() {
+                let user = $('#user').val().trim();
+                let password = $('#password').val();
+                if (user.length == 0 || password.length == 0) {
+                    $ws.toast('账号或密码不能为空','error');
+                    return;
+                }
+                if ($('#checked').is(':checked')) {
+                    setCookie('user', user, 7);
+                    setCookie('password', password, 7);
+                    setCookie('checked', 'true', 7);
+                } else {
+                    setCookie('user', null, 7);
+                    setCookie('password', null, 7);
+                    setCookie('checked', 'false', 7);
+                }
+                console.log('登录成功')
+                return
+                $ws.ajax({
+                    url: "../User/SubmitLogin",
+                    data: {
+                        UserCode: user,
+                        Psw: password
+                    },
+                    success(){
+                        if ($('#checked').is(':checked')) {
+                            setCookie('user', user, 7);
+                            setCookie('password', password, 7);
+                            setCookie('checked', 'true', 7);
+                        } else {
+                            setCookie('user', null, 7);
+                            setCookie('password', null, 7);
+                            setCookie('checked', 'false', 7);
+                        }
+                        window.location.href = "../user/index";
+                    }
+                });
+            }
+            //设置cookie
+            function setCookie(name, value, day) {
+                var date = new Date();
+                date.setDate(date.getDate() + day);
+                document.cookie = name + '=' + value + ';expires=' + date +';path=/';
+            };
+            //获取cookie
+            function getCookie(name) {
+                var reg = RegExp(name + '=([^;]+)');
+                var arr = document.cookie.match(reg);
+                if (arr) {
+                    return arr[1];
+                } else {
+                    return '';
+                }
+            };
+            //实现回车登录
+            $(window).keydown(function(e) {
+                if (e.which == 13) {
+                    send();
+                    return false;
                 }
             });
-        }
-        //设置cookie
-        function setCookie(name, value, day) {
-            var date = new Date();
-            date.setDate(date.getDate() + day);
-            document.cookie = name + '=' + value + ';expires=' + date +';path=/';
-        };
-        //获取cookie
-        function getCookie(name) {
-            var reg = RegExp(name + '=([^;]+)');
-            var arr = document.cookie.match(reg);
-            if (arr) {
-                return arr[1];
-            } else {
-                return '';
-            }
-        };
-        //实现回车登录
-        $(window).keydown(function(e) {
-            if (e.which == 13) {
-                send();
-                return false;
-            }
-        });
+        })(window.$ws,window.$)
     </script>
 </html>
