@@ -149,7 +149,7 @@
     animation: wsToastOut 0.35s ease-in;
 }
 /**
- * 选择框
+ * 多选框
  */
 .ws-input-checkbox {
     display: flex;
@@ -210,9 +210,14 @@ input[type='checkbox']:checked:after {
     opacity: 1;
 }
 /**
- * input
+ *  =====================
+ *  表单系列
+  * ==================
  */
-.ws-input-text {
+/**
+ * 单个input包裹盒子
+ */
+.ws-input-text,.ws-input-select {
     display: flex;
     justify-content: space-between;
     align-items: stretch;
@@ -222,6 +227,9 @@ input[type='checkbox']:checked:after {
     position: relative;
     z-index: 1;
 }
+/**
+ * input
+ */
 .ws-input-box{
     position: absolute;
     left:0px;right:0px;top:0px;bottom: 0px;
@@ -242,9 +250,7 @@ input[type='checkbox']:checked:after {
     padding: 0 14px;
     font-size: 17px;
 }
-.ws-input-text:hover >.ws-input-box{
-    border-bottom: 1px solid @mainColor;
-}
+
 @keyframes wsInputBoxAfter{
     0%{width:0px;}
     100%{width:100%}
@@ -259,9 +265,41 @@ input[type='checkbox']:checked:after {
     background-color: @mainColor;
     animation:wsInputBoxAfter 0.2s;
 }
-// .ws-input-text:hover {
-//     border-bottom: 1px solid @mainColor;
-// }
+/**
+ * 下拉框  select
+ */
+.ws-input-select{
+    select{
+        outline: none;
+        flex-grow: 1;
+        padding: 0 14px;
+        font-size: 17px;
+        width:100%;
+        //清除select聚焦时候的边框颜色
+        outline: none;
+        //隐藏select的下拉图标
+        // appearance: none;
+        // -webkit-appearance: none;
+        // -moz-appearance: none;
+    }
+}
+.ws-input-text:hover>.ws-input-box , .ws-input-select:hover > .ws-input-box{
+    border-bottom: 1px solid @mainColor;
+}
+/**
+ * 分页
+ */
+.ws-page-box {
+    .ws-global-selectno;
+    display: flex;
+    > div {
+        padding: 0 20px;
+    }
+    .ws-page-box-click {
+        cursor: pointer;
+        color: @mainColor;
+    }
+}
 /**
  * 按钮
  */
@@ -496,15 +534,19 @@ input[type='checkbox']:checked:after {
         }
     }
     // 内容承载器
-    .ws-sidecon-content{
+    .ws-sidecon-content-box{
         box-shadow: 0px -3px 10px 1px rgba(0,0,0,0.1);
         border-radius: 3px;
         border:1px solid rgba(0,0,0,0.1);
         background-color: white;
         height:~'calc( 100vh - 80px )';
         position: relative;
-        padding:20px;
-        overflow: auto;
+        .ws-sidecon-content{
+            display: none;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+        }
     }
 }
 // 隐藏

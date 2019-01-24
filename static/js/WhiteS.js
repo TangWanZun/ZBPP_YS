@@ -14,28 +14,29 @@ window.$ws = $ws;
  */
 $ws.uuid = function(len, radix) {
     var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
-    var uuid = [], i;
+    var uuid = [],
+        i;
     radix = radix || chars.length;
- 
+
     if (len) {
-      // Compact form
-      for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random()*radix];
+        // Compact form
+        for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix];
     } else {
-      // rfc4122, version 4 form
-      var r;
- 
-      // rfc4122 requires these characters
-      uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
-      uuid[14] = '4';
- 
-      // Fill in random data.  At i==19 set the high bits of clock sequence as
-      // per rfc4122, sec. 4.1.5
-      for (i = 0; i < 36; i++) {
-        if (!uuid[i]) {
-          r = 0 | Math.random()*16;
-          uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+        // rfc4122, version 4 form
+        var r;
+
+        // rfc4122 requires these characters
+        uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+        uuid[14] = '4';
+
+        // Fill in random data.  At i==19 set the high bits of clock sequence as
+        // per rfc4122, sec. 4.1.5
+        for (i = 0; i < 36; i++) {
+            if (!uuid[i]) {
+                r = 0 | Math.random() * 16;
+                uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+            }
         }
-      }
     }
     return uuid.join('');
 }
@@ -262,13 +263,13 @@ $ws.sidecon = {
     //侧边标签库出现
     show() {
         let me = $ws.sidecon;
-        if(me.dom.classList.contains('ws-sidecon-hidden')){
+        if (me.dom.classList.contains('ws-sidecon-hidden')) {
             //没有被销毁的情况下
             me.dom.classList.remove('ws-sidecon-hidden');
-            setTimeout(()=>{
+            setTimeout(() => {
                 me.dom.querySelector('.ws-sidecon-bg').style.display = "block";
-            },150)
-        }else{
+            }, 150)
+        } else {
             me.dom.style.display = "block";
         }
     },
@@ -290,15 +291,15 @@ $ws.sidecon = {
         let _pro = {
             title: pro.title || '新建页签',
             content: pro.content || '',
-            id:pro.id||'',
-            callback:pro.callback
+            id: pro.id || '',
+            callback: pro.callback
         }
         //当存在_pro.id的时候
-        if(_pro.id){
-            let labelList =  me.dom.querySelectorAll('.ws-sidecon-label');
+        if (_pro.id) {
+            let labelList = me.dom.querySelectorAll('.ws-sidecon-label');
             //判断是否存在重复的_id
-            for(let i =0;i<labelList.length;i++){
-                if(labelList[i]._id==_pro.id){
+            for (let i = 0; i < labelList.length; i++) {
+                if (labelList[i]._id == _pro.id) {
                     //表示存在重复_id
                     //则展示词标签
                     me.labelShow(labelList[i])
@@ -313,26 +314,26 @@ $ws.sidecon = {
         //添加标签
         labelDom.className = 'ws-sidecon-label';
         labelDom.innerHTML =
-        `
+            `
             <span>${_pro.title}</span><div class="ws-sidecon-label-close"></div>
         `
         labelBox.appendChild(labelDom);
         //为删除页签按钮添加事件
-        labelDom.querySelector('.ws-sidecon-label-close').addEventListener('click',function(e){
+        labelDom.querySelector('.ws-sidecon-label-close').addEventListener('click', function(e) {
             //阻止、事件冒泡
             e.stopPropagation();
             me.closeLabel(e.target.parentElement)
         })
         //为页签按钮添加事件
-        labelDom.addEventListener('click',function(e){
+        labelDom.addEventListener('click', function(e) {
             me.labelShow(labelDom);
         })
         //将内容数据进行保存
         labelDom._innerHTML = _pro.content;
         //展示添加页的内容
-        me.labelShow(labelDom,function(contentDom){
+        me.labelShow(labelDom, function(contentDom) {
             //当添加新的页面完成之后，回调，参数是内容的dom元素
-            _pro.callback&&_pro.callback(contentDom)
+            _pro.callback && _pro.callback(contentDom)
         });
         //生成一个uuid
         let _uuid = $ws.uuid(10);
@@ -341,21 +342,21 @@ $ws.sidecon = {
         return _pro.id
     },
     //删除一个标签
-    closeLabel(dom){
+    closeLabel(dom) {
         let me = $ws.sidecon;
-        let labelList =  me.dom.querySelectorAll('.ws-sidecon-label');
+        let labelList = me.dom.querySelectorAll('.ws-sidecon-label');
         //删除标签
         // selectDomList[index].remove();
-        if(labelList.length<=1){
+        if (labelList.length <= 1) {
             //当页签只剩余一个的时候，将直接清除掉侧边展示栏
             me.close();
-        }else{
+        } else {
             //当点击的就是选择页签的时候
-            if(dom.classList.contains("ws-sidecon-label-select")){
+            if (dom.classList.contains("ws-sidecon-label-select")) {
                 //当存在后一个兄弟的时候
-                if(dom.nextSibling){
+                if (dom.nextSibling) {
                     me.labelShow(dom.nextSibling);
-                }else{
+                } else {
                     me.labelShow(dom.previousSibling);
                 }
             }
@@ -364,19 +365,19 @@ $ws.sidecon = {
         }
     },
     //展示新的页签。
-    labelShow(dom,callback){
+    labelShow(dom, callback) {
         let me = $ws.sidecon;
-        if(me.dom.classList.contains('ws-sidecon-hidden')){
+        if (me.dom.classList.contains('ws-sidecon-hidden')) {
             //表示处于收起状态
             //改变成打开状态
             me.show();
         }
         let contentDom = me.dom.querySelector('.ws-sidecon-content');
         let selectDomList = me.dom.querySelectorAll('.ws-sidecon-label');
-        for(let i = 0;i<selectDomList.length;i++){
-            if(selectDomList[i].classList.contains("ws-sidecon-label-select")){
+        for (let i = 0; i < selectDomList.length; i++) {
+            if (selectDomList[i].classList.contains("ws-sidecon-label-select")) {
                 //当前为展示页面，这个时候需要缓存页面数据
-                selectDomList[i]._innerHTML= contentDom.innerHTML;
+                selectDomList[i]._innerHTML = contentDom.innerHTML;
                 selectDomList[i].classList.remove('ws-sidecon-label-select');
             }
         }
@@ -384,40 +385,44 @@ $ws.sidecon = {
         //添加内容页
         contentDom.innerHTML = dom._innerHTML;
         //当每次展示新的页签结束后，都会有回调函数，参数就是内容页
-        callback&&callback(contentDom)
+        callback && callback(contentDom)
     },
 }
 /**
  * 创建一个翻页组件
  */
-$ws.page = function(pro={}){
+$ws.page = function(pro = {}) {
     let _pro = {
-        el:pro.el||'',
-        url:pro.url||'',
-        data:pro.data||{},
-        callback:pro.callback,
-        start:pro.start||0,
-        limit:pro.limit||25
+        el: pro.el || '',
+        url: pro.url || '',
+        data: pro.data || {},
+        callback: pro.callback,
+        start: pro.start || 0,
+        limit: pro.limit || 25
     }
     let dom = document.createElement('div');
-    dom.innerHTML=`
-        <div class="page-box">
-        <div class="page-box-click">
+    dom.innerHTML =
+        `
+    <div class="ws-page-box">
+        <div class="ws-page-box-click">
             首页
         </div>
-        <div class="page-box-click">
+        <div class="ws-page-box-click">
             上一页
         </div>
-        <div class="page-limit" id="ws-page-limitPage">
+        <div class="ws-page-limit" id="ws-page-total">
+            共 0 条数据
+        </div>
+        <div class="ws-page-limit" id="ws-page-limitPage">
             共 1 页
         </div>
-        <div class="page-limit" id="ws-page-newPage">
+        <div class="ws-page-limit" id="ws-page-newPage">
             当前为第 1 页
         </div>
-        <div class="page-box-click">
+        <div class="ws-page-box-click">
             下一页
         </div>
-        <div class="page-box-click">
+        <div class="ws-page-box-click">
             尾页
         </div>
     </div>
@@ -428,70 +433,91 @@ $ws.page = function(pro={}){
     let page = 1;
     //添加回调方法
     //改变总页数
-    function selectTotal(callTotal){
+    function selectTotal(callTotal) {
         total = callTotal;
         dom.querySelector('#ws-page-limitPage').innerHTML = `共 ${  Math.ceil(callTotal/_pro.limit)} 页`;
+        dom.querySelector('#ws-page-total').innerHTML = `共 ${ callTotal} 条数据`;
     }
     //改变当前页数
-    function selectPage(callPage){
+    function selectPage(callPage) {
+        //判断是否可以改变
+        if (callPage <= 0 || callPage > Math.ceil(total / _pro.limit)) {
+            //说明当前页数已经超过了
+            return false;
+        }
         page = callPage;
         dom.querySelector('#ws-page-newPage').innerHTML = `当前为第 ${callPage} 页`;
+        return true;
     }
     //首先将会先运行一次回调
     _pro.callback({
-        start:_pro.start,
-        limit:_pro.limit
-    },function(callTotal){
+        start: _pro.start,
+        limit: _pro.limit
+    }, function(callTotal) {
         //获取全部数据
         selectTotal(callTotal);
         //添加内部方法
-        let clickList =  dom.querySelectorAll('.page-box-click'); 
+        let clickList = dom.querySelectorAll('.ws-page-box-click');
         //首页
-        clickList[0].addEventListener('click',()=>{
+        clickList[0].addEventListener('click', () => {
             //更新页面
             _pro.start = 0;
-            selectPage(1);
+            selectPage(1)
             _pro.callback({
-                start:_pro.start,
-                limit:_pro.limit
-            },selectTotal)
+                start: _pro.start,
+                limit: _pro.limit
+            }, selectTotal)
         })
         //上一页
-        clickList[1].addEventListener('click',()=>{
+        clickList[1].addEventListener('click', () => {
             //更新页面
-            _pro.start -= _pro.limit;
-            selectPage(page-1);
-            _pro.callback({
-                start:_pro.start,
-                limit:_pro.limit
-            },selectTotal)
+            if (selectPage(page - 1)) {
+                _pro.start -= _pro.limit;
+                _pro.callback({
+                    start: _pro.start,
+                    limit: _pro.limit
+                }, selectTotal)
+            }
         })
         //下一页
-        clickList[2].addEventListener('click',()=>{
+        clickList[2].addEventListener('click', () => {
             //更新页面
-            _pro.start += _pro.limit;
-            selectPage(page+1);
-            _pro.callback({
-                start:_pro.start,
-                limit:_pro.limit
-            },selectTotal)
+            if (selectPage(page + 1)) {
+                _pro.start += _pro.limit;
+                _pro.callback({
+                    start: _pro.start,
+                    limit: _pro.limit
+                }, selectTotal)
+            }
         })
         //尾页
-        clickList[3].addEventListener('click',()=>{
+        clickList[3].addEventListener('click', () => {
             //更新页面
-            _pro.start += _pro.limit;
-            selectPage(Math.ceil(callTotal/_pro.limit));
+            let page = Math.ceil(callTotal / _pro.limit);
+            _pro.start = _pro.limit * (page - 1);
+            selectPage(page);
             _pro.callback({
-                start:_pro.start,
-                limit:_pro.limit
-            },selectTotal)
+                start: _pro.start,
+                limit: _pro.limit
+            }, selectTotal)
         })
     })
     //将创建好的翻页组件添加到el当中区
-    if(typeof _pro.el == 'string'){
+    if (typeof _pro.el == 'string') {
         document.querySelector(_pro.el).appendChild(dom);
-    }else{
+    } else {
         _pro.el.appendChild(dom);
+    }
+    //添加对外暴露函数
+    //刷新当前页
+    function reset() {
+        _pro.callback({
+            start: _pro.start,
+            limit: _pro.limit
+        }, selectTotal);
+    }
+    return {
+        reset
     }
 }
 /**
@@ -512,7 +538,7 @@ $ws.ajax = function(pro = {}) {
         data: _pro.data,
         success: function(res) {
             if (res.errcode == 0) {
-                _pro.success && _pro.success(res.errmsg);
+                _pro.success && _pro.success(res);
             } else {
                 $ws.toast(res.errmsg, 'error');
                 _pro.fail && _pro.fail();
@@ -525,4 +551,3 @@ $ws.ajax = function(pro = {}) {
         },
     });
 }
-
