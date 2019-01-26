@@ -1,4 +1,19 @@
-(($ws, $) => {
+(($ws, $,window) => {
+    //全局保存常亮
+    const CMP_STATUS = {
+        WAIT: {
+            code: 'Wait',
+            name: '待审核'
+        },
+        SUCCESS: {
+            code: 'Success',
+            name: '审核通过'
+        },
+        DISABLE: {
+            code: 'Disable',
+            name: '停用'
+        }
+    }
     //创建一个翻页
     let cmpListPage = $ws.page({
         el: "#page",
@@ -24,14 +39,21 @@
                 let tableDom = $('#cmpTable');
                 for (let x = 0; x < dataList.length; x++) {
                     let item = dataList[x];
-                    let eleHTML =
-                        `
+                    //获取状态
+                    let statusName = '';
+                    switch (item.DocStatus) {
+                        case CMP_STATUS.SUCCESS.code: statusName = CMP_STATUS.SUCCESS.name; break;
+                        case CMP_STATUS.DISABLE.code: statusName = CMP_STATUS.DISABLE.name; break;
+                        default: statusName = CMP_STATUS.WAIT.name; break;
+                    }
+                    let eleHTML = `
                         <tr class="table-tr">
                             <td>${item.UserName || '-'}</td>
                             <td>${item.Introduction || '-'}</td>
                             <td>${item.Phone || '-'}</td>
                             <td>${item.Address || '-'}</td>
                             <td>${item.UserCode || '-'}</td>
+                            <td>${statusName}</td>
                             <td>
                                 <span class="table-btn">信息修改</span>
                                 <span class="table-btn" _id="${item.Id}">登录日志</span>
@@ -44,7 +66,7 @@
                     let dom = $(eleHTML);
                     let btnList = dom.find('.table-btn');
                     //添加信息修改
-                    btnList[0].addEventListener('click', function() {
+                    btnList[0].addEventListener('click', function () {
                         infoModify(btnList[0], {
                             id: item.Id,
                             userCode: item.UserCode,
@@ -56,15 +78,15 @@
                         });
                     })
                     //添加登录日志
-                    btnList[1].addEventListener('click', function() {
+                    btnList[1].addEventListener('click', function () {
                         showLoginInfo(btnList[1], item.UserCode, item.UserName);
                     })
                     //添加密码重置
-                    btnList[2].addEventListener('click', function() {
-                        passwordReset(btnList[2]);
+                    btnList[2].addEventListener('click', function () {
+                        passwordReset(btnList[2], item.UserCode, item.UserName);
                     })
                     //添加接口日志
-                    btnList[3].addEventListener('click', function() {
+                    btnList[3].addEventListener('click', function () {
                         showInterfaceInfo(btnList[3], item.AppKey, item.UserName);
                     })
                     tableDom.append(dom)
@@ -73,10 +95,26 @@
             }
         })
     }
-    //管理员密码修改
-    $('#adminInfoModify').on('click', function() {
+    //退出登录
+    $('#adminSignOut').on('click', function () {
         $ws.modal({
-            headText: '修改密码',
+            headText: '提示',
+            confirmText: '确定',
+            content: '确定要退出登录吗？',
+            onConfirm(e) {
+                $ws.ajax({
+                    url: "../User/LoginOut",
+                    success: function () {
+                        window.location.href = "../user/index";
+                    }
+                });
+            }
+        });
+    })
+    //管理员密码修改
+    $('#adminInfoModify').on('click', function () {
+        $ws.modal({
+            headText: '管理员密码修改',
             confirmText: '确定修改',
             content: `
         <div class="login-row">
@@ -134,7 +172,7 @@
                     success() {
                         e.close();
                         $ws.toast('密码修改成功，请重新登陆', {
-                            callback: function() {
+                            callback: function () {
                                 window.location.href = "../user/index";
                             }
                         });
@@ -153,7 +191,7 @@
                 <div class="ws-input-text">
                     <div class="ws-input-left input-img-yh">
                     </div>
-                    <input value="${data.userCode}" placeholder="请输入用户名(用于登录,4到13位字母或数字组合)*" id="info-userCode" />
+                    <input value="${data.userCode || '-'}" placeholder="请输入用户名(用于登录,4到13位字母或数字组合)*" id="info-userCode" />
                     <label class="ws-input-box"></label>
                 </div>
             </div>
@@ -161,7 +199,7 @@
                 <div class="ws-input-text">
                     <div class="ws-input-left input-img-gs">
                     </div>
-                    <input value="${data.userName}" placeholder="请输入公司名称*" id="info-userName" />
+                    <input value="${data.userName || '-'}" placeholder="请输入公司名称*" id="info-userName" />
                     <label class="ws-input-box"></label>
                 </div>
             </div>
@@ -169,7 +207,7 @@
                 <div class="ws-input-text">
                     <div class="ws-input-left input-img-js">
                     </div>
-                    <input value="${data.introduction}"  placeholder="请输入介绍" id="info-introduce" />
+                    <input value="${data.introduction || '-'}"  placeholder="请输入介绍" id="info-introduce" />
                     <label class="ws-input-box"></label>
                 </div>
             </div>
@@ -177,7 +215,7 @@
                 <div class="ws-input-text">
                     <div class="ws-input-left input-img-lxdh">
                     </div>
-                    <input value="${data.phone}" placeholder="请输入联系电话*" type="tel" id="info-phone"/>
+                    <input value="${data.phone || '-'}" placeholder="请输入联系电话*" type="tel" id="info-phone"/>
                     <label class="ws-input-box"></label>
                 </div>
             </div>
@@ -185,7 +223,7 @@
                 <div class="ws-input-text">
                     <div class="ws-input-left input-img-dz">
                     </div>
-                    <input value="${data.address}" placeholder="请输入所在地址" id="info-address" />
+                    <input value="${data.address || '-'}" placeholder="请输入所在地址" id="info-address" />
                     <label class="ws-input-box"></label>
                 </div>
             </div>
@@ -193,10 +231,10 @@
                 <div class="ws-input-select">
                     <div class="ws-input-left input-img-sh">
                     </div>
-                    <select id="info-docStatus" value="${data.docStatus}">
-                      <option value ="" selected>未审核</option>
-                      <option value ="A01">同意</option>
-                      <option value="A02" selected>拒绝</option>
+                    <select id="info-docStatus">
+                      <option value ="Wait" selected>${CMP_STATUS.WAIT.name}</option>
+                      <option value ="Success" ${data.docStatus == CMP_STATUS.SUCCESS.code ? 'selected' : ''}>${CMP_STATUS.SUCCESS.name}</option>
+                      <option value="Disable" ${data.docStatus == CMP_STATUS.DISABLE.code ? 'selected' : ''}>${CMP_STATUS.DISABLE.name}</option>
                     </select>
                     <label class="ws-input-box"></label>
                 </div>
@@ -236,7 +274,7 @@
                         phone: phone,
                         address: address,
                         docStatus: docStatus,
-                        state: $state
+                        state: window.$state
                     },
                     success() {
                         e.close();
@@ -256,7 +294,7 @@
             title: userName + "-登录日志",
             id: $(dom).attr('_id') + 'jk',
             content: `
-            <div id="app-table">
+            <div id="app-table"  class="app-table-sidecon">
                 <div class="table">
                     <table border="0" id="table-dl">
                         <tr class="table-tr">
@@ -268,7 +306,7 @@
                     </table>
                 </div>
             </div>
-            <div class="page-box">
+            <div class="page-box  page-box-sidecon">
             </div>
         `,
             callback(contentDom) {
@@ -292,8 +330,7 @@
                                 let dataList = res.data;
                                 for (let x = 0; x < dataList.length; x++) {
                                     let item = dataList[x];
-                                    content +=
-                                        `
+                                    content += `
                                     <tr class="table-tr">
                                         <td>${item.CreateDate}</td>
                                         <td>${item.IpAddress}</td>
@@ -314,24 +351,69 @@
     function showInterfaceInfo(dom, appKey, userName) {
         //初始化侧边标签栏
         $ws.sidecon.init();
+        //添加接口次数
         $ws.sidecon.add({
-            title: userName + "-接口日志",
-            id: $(dom).attr('_id') + 'dl',
+            title: userName + "-接口次数",
+            id: $(dom).attr('_id') + 'dlcs',
             content: `
-            <div id="app-table">
+            <div id="app-table" style="padding:20px;">
                 <div class="table">
-                    <table border="0" id="table-jk">
+                    <table border="0" id="table-jk-js">
                         <tr class="table-tr">
-                            <th>调用时间</th>
                             <th>类型</th>
-                            <th>url</th>
                             <th>描述</th>
-                            <th>操作</th>
+                            <th>次数</th>
                         </tr>
                     </table>
                 </div>
             </div>
-            <div class="page-box">
+        `,
+            callback(contentDom) {
+                //获取接口调用次数
+                $ws.ajax({
+                    url: '../User/GetApiLogCountList',
+                    data: {
+                        appKey: appKey
+                    },
+                    success(res) {
+                        //数据清空
+                        let boxDom = $('#table-jk-js');
+                        boxDom.html(boxDom.find('tr')[0]);
+                        //更新数据
+                        let dataList = res.data;
+                        let content = '';
+                        for (let x = 0; x < dataList.length; x++) {
+                            let item = dataList[x];
+                            content += `
+                                <tr class="table-tr">
+                                    <td>${item.ApiCallType || '-'}</td>
+                                    <td>${item.ApiCallTypeDesc || '-'}</td>
+                                    <td>${item.Count || '0'}</td>
+                                </tr>
+                            `
+                        }
+                        $(contentDom).find('#table-jk-js').append(content);
+                    }
+                })
+            }
+        });
+        $ws.sidecon.add({
+            title: userName + "-接口日志",
+            id: $(dom).attr('_id') + 'dl',
+            content: `
+            <div id="app-table" class="app-table-sidecon">
+                <div class="table">
+                    <table border="0" id="table-jk">
+                        <tr class="table-tr">
+                            <th>调用时间</th>
+                            <th>url</th>
+                            <th>类型</th>
+                            <th>描述</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="page-box page-box-sidecon">
             </div>
         `,
             callback(contentDom) {
@@ -353,38 +435,38 @@
                                 boxDom.html(boxDom.find('tr')[0]);
                                 //更新数据
                                 let dataList = res.data;
-                                let content = '';
                                 let tableDom = $(contentDom).find('#table-jk')
                                 for (let x = 0; x < dataList.length; x++) {
                                     let item = dataList[x];
-                                    let content =
-                                        `
-                                        <tr class="table-tr">
-                                            <td>${item.CreateDate||'-'}</td>
-                                            <td>${item.Url||'-'}</td>
-                                            <td>${item.ApiCallType||'-'}</td>
-                                            <td>${item.ApiCallTypeDesc||'-'}</td>
-                                            <td><span class="table-sidecon-btn input-img-fx" onclick="selectTableTr(this)"></span></td>
+                                    let content = `
+                                        <tr class="table-tr table-tr-btn" data-show="0">
+                                            <td>${item.CreateDate || '-'}</td>
+                                            <td>${item.Url || '-'}</td>
+                                            <td>${item.ApiCallType || '-'}</td>
+                                            <td id="666">${item.ApiCallTypeDesc || '-'}</td>
                                         </tr>
                                         <tr class="table-tr" style="display:none">
                                             <td  colspan="6">
                                                 <div class="table-sidecon-content">
                                                     <div class="table-sidecon-content-left">
                                                         <div class="table-sidecon-content-title">请求参数</div>
-                                                            <div>${JSON.stringify(item.PostRequestData)||'-'}</div>
+                                                            <div>${JSON.stringify(item.PostRequestData) || '-'}</div>
                                                     </div>
                                                     <div class="table-sidecon-content-right">
                                                         <div class="table-sidecon-content-title">返回参数</div>
-                                                            <div>${JSON.stringify(item.ResponseData)||'-'}</div>
+                                                            <div>${JSON.stringify(item.ResponseData) || '-'}</div>
                                                     </div>
                                                 </div>
                                             </td>
                                         </tr>
                                     `
                                     let itemDom = $(content);
+                                    $(itemDom[0]).on('click', (e) => {
+                                        selectTableTr(e.currentTarget);
+                                    })
                                     tableDom.append(itemDom)
                                 }
-                                selectPage(res.total)
+                                selectPage(res.total) 
                             }
                         })
                     }
@@ -392,17 +474,31 @@
             }
         });
     }
+    //控制出现的表格隐藏内容
+    function selectTableTr(dom) {
+        let meDom = $(dom);
+        console.log(meDom.attr('data-show'));
+        if (meDom.attr('data-show')=='0') {
+            //表示为开启状态
+            meDom.attr('data-show',1);
+            meDom.next().css('display', '');
+        } else {
+            //表示为关闭状态
+            meDom.attr('data-show',0);
+            meDom.next().css('display', 'none');
+        }
+    }
     //点击密码重置
-    function passwordReset() {
+    function passwordReset(dom, userCode, userName) {
         $ws.modal({
             headText: '密码重置',
             confirmText: '确定修改',
             content: `
         <div class="login-row">
-            公司名称：关东税有限公司
+            公司名称：${userName}
         </div>
         <div class="login-row">
-           登录用户名：G0001
+           登录用户名：${userCode}
         </div>
         <div class="login-row">
             <div class="ws-input-text">
@@ -416,18 +512,19 @@
                 //判断数据是否存在问题
                 let pwd = $('#p-pwd').val();
                 if (pwd.length == 0) {
-                    $ws.toast('请输入当前密码', 'error');
+                    $ws.toast('请输入密码不能为空', 'error');
                     return
                 }
                 $ws.ajax({
-                    url: "../User/ModifyPsw",
+                    url: "../User/ModifyRegPsw",
                     data: {
-                        OldPsw: pwd,
+                        usercode:userCode,
+                        psw:pwd
                     },
                     success() {
                         e.close();
-                        $ws.toast('密码修改成功，请重新登录', {
-                            callback: function() {
+                        $ws.toast('密码修改成功', {
+                            callback: function () {
                                 window.location.href = "../user/index";
                             }
                         });
@@ -436,18 +533,4 @@
             }
         });
     }
-})(window.$ws, window.$)
-//控制出现的表格隐藏内容
-function selectTableTr(dom) {
-    let meDom = $(dom);
-    let meDomParent = meDom.parents('tr');
-    if (meDom.hasClass('table-sidecon-btn-select')) {
-        //表示为开启状态
-        meDom.removeClass('table-sidecon-btn-select');
-        meDomParent.next().css('display', 'none');
-    } else {
-        //表示为关闭状态
-        meDom.addClass('table-sidecon-btn-select');
-        meDomParent.next().css('display', '');
-    }
-}
+})(window.$ws, window.$,window)

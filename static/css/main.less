@@ -1,4 +1,5 @@
 @mainColor: #3892d3;
+@mainColor2:#4ebde4;
 // 样式重置
 * {
     border: 0px;
@@ -39,6 +40,9 @@
     align-items: center;
 }
 .login {
+    position: relative;
+    background-color: white;
+    z-index: 2;
     width: 400px;
     margin-bottom: 15vh;
     // height: 500px;
@@ -239,7 +243,6 @@
         .table-btn {
             // display: block;
             .btn;
-            margin-bottom: 10px;
             &:last-child {
                 margin-bottom: 0px;
             }
@@ -248,7 +251,7 @@
 }
 //侧边标签页 中的表格
 .app-table-sidecon{
-    height: ~'calc( 100% - 50px )';
+    height: ~'calc( 100% - 60px )';
     overflow: auto;
     padding:20px;
 }
@@ -263,6 +266,7 @@
     width: 100%;
     background-color: white;
     border-top: 1px solid rgba(0,0,0,0.1);
+    padding-left: 20px;
 }
 //可点击表格行
 .table-tr-btn{
@@ -302,7 +306,14 @@
         margin-bottom: 10px;
     }
 }
-
+.table-tr-grid{
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    grid-gap: 10px 10px;
+    justify-content: space-between;
+    align-content: space-between;
+}
 /**
  * 后台管理用户窗口
  */
@@ -310,15 +321,15 @@
     @beforeWidth: 50px;
     position: fixed;
     top: 20px;
-    right: 10px;
+    left: 10px;
     min-width: @beforeWidth;
     height: @beforeWidth;
-    border-radius:0px 5px 5px 0px;
+    border-radius:5px 0px 0px 5px;
     background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
     transition: 0.2s;
-    transform: translateX(@beforeWidth*2+10px);
+    transform: translateX(-@beforeWidth*2 - 10px);
     display: flex;
     align-items: stretch;
     &::before {
@@ -327,14 +338,22 @@
         height: @beforeWidth;
         position: absolute;
         top: 0px;
-        left: -@beforeWidth;
+        right: -@beforeWidth;
         background-color: @mainColor;
-        border-radius: 5px 0 0 5px;
+        border-radius: 0px 5px 5px 0px;
         box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
         background-size: 50%;
         background-position: center;
         background-repeat: no-repeat;
         background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB0PSIxNTQ4MjEwNTAwMTA0IiBjbGFzcz0iaWNvbiIgc3R5bGU9IiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjE5NjYiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PC9zdHlsZT48L2RlZnM+PHBhdGggZD0iTTc3NS4yNjUgMjIwLjYwOEM3NTAuMjc5IDc1LjQwNSA2MTQuMjU0LTIxLjQ0IDQ3MS41MjEgNC4wODMgMzI4Ljk4MSAyOS42MiAyMDguNTMyIDE0MS40MjcgMjMzLjcxIDI4Ni40NTFjNS40NCAzMS4zNzMgMjAuNDggODAuMjU2IDM4LjIyIDExNS40NjlMMTIuOTI0IDc3OC4yNGMtOS42IDEzLjg1LTE1LjA0IDM4Ljg0OC0xMi4xMzUgNTUuNjI5bDExLjIyNiA2NC4zODRjLTEwLjY4OC02Mi4wMTYgMi45MDUgMjIuNDM4IDExLjIyNSAyMi4wNjdsODUuMzEyIDEuMjhjMTYuNDg3LTIuOTE4IDM3LjEyLTE2Ljk2IDQ2LjE4My0zMS4xOTRsMTAyLjUyOC0xNjEuNDMzIDAuODk2LTEuMDg4IDg5LjQ3MiA3LjEwNCAxMTkuNzMxLTE4OC45OHMyNi42MzctNTQuOTExIDEyNS4zMTItMTA3LjczN2M5MC4zMy00Mi4xMTIgMTY2LjAyOS0zMy4zMTggMTY2LjAyOS0zMy4zMTggMjEuOTY1LTU1LjM3MyAyNy43MTItMTIwLjY2NiAxNi41NjMtMTg0LjM0NnpNODMuMDAzIDgwNC4wNDVsLTIyLjQgMTQuMjA4IDUuMjIyLTI1LjUyMyAyNDMuMDcyLTM1MC4zMzYgMTYuODA2IDExLjg0TDgzLjAxNSA4MDQuMDU4eiBtNTY2LjAxNi01MDkuMTk3Yy0zOS4yOTYgNTYuOTA5LTc5LjMyMiAxNi43OC0xMzUuMjk2LTIzLjE2OC01NS45NjItMzkuOTQ5LTEwNi44NTUtNjQuMzg0LTY3LjU0Ni0xMjEuNDg1IDM5LjI5Ni01Ni45MDkgMTE2LjQ1NC03MC45NSAxNzIuNDE2LTMxLjAxNCA1NS45NzQgNDAuMTQgNjkuNzM0IDExOC43NTggMzAuNDM4IDE3NS42Njd6IiBmaWxsPSIjZmZmZmZmIiBwLWlkPSIxOTY3Ij48L3BhdGg+PHBhdGggZD0iTTk0OC4xMjkgNjcwLjk3NmEyMjEuMjIyIDIyMS4yMjIgMCAwIDAtMjIuNDktNTQuNTAybDQyLjkzMi02NC41OS0wLjIxOC0wLjExNC02MS4wMDUtNjAuOTU0LTAuMTE1LTAuMTAyLTY0LjYyNyA0Mi45MDVhMjIzLjQxMSAyMjMuNDExIDAgMCAwLTU0LjI3Mi0yMi40NzdMNzcyLjg3IDQzNS4yaC04Ni40MjVsLTE1LjQ1IDc1LjgyN2EyMjMuMzYgMjIzLjM2IDAgMCAwLTU0LjI5NyAyMi40NzdsLTY0LjYyOC00Mi44MDMtNjEuMjEgNjEuMTg0IDQyLjkzMiA2NC41ODlhMjE3LjMwNiAyMTcuMzA2IDAgMCAwLTIyLjYwNSA1NC40OWwtNzUuOTggMTUuNDM2djg2LjRsNzUuOTggMTUuNDI0YTIyNC43OTQgMjI0Ljc5NCAwIDAgMCAyMi40OSA1NC41MDJsLTQyLjkzMSA2NC41OSA2MS4yMjIgNjEuMTgzIDY0Ljc0Mi00Mi45MThhMjIzLjAyNCAyMjMuMDI0IDAgMCAwIDU0LjI4NSAyMi40NzdsMTUuNDUgNzUuOTQyaDg2LjQzOGwxNS40NS03NS45NDJhMjIxLjY1OCAyMjEuNjU4IDAgMCAwIDU0LjI3Mi0yMi40NzdsNjQuNjQgNDIuOTA1IDAuMTE1LTAuMTAyIDYwLjk5Mi02MC45NTQgMC4xMTUtMC4xMjgtNDIuOTMxLTY0LjU3NmEyMjEuMjIyIDIyMS4yMjIgMCAwIDAgMjIuNDktNTQuNTAybDc1Ljk4LTE1LjQzN1Y2ODYuNGwtNzUuODc4LTE1LjQyNHpNNzI5LjgyNSA4MzEuNzE4YTEwMi4zMSAxMDIuMzEgMCAwIDEtMTAyLjIyLTEwMi40IDEwMi4zMSAxMDIuMzEgMCAwIDEgMTAyLjQ1LTEwMi4xNTYgMTAyLjMxIDEwMi4zMSAwIDAgMSAxMDIuMjIxIDEwMi40IDEwMi4zMSAxMDIuMzEgMCAwIDEtMTAyLjQ1MSAxMDIuMTQ0eiIgZmlsbD0iI2ZmZmZmZiIgcC1pZD0iMTk2OCI+PC9wYXRoPjwvc3ZnPg==);
+    }
+    &::after{
+         content: '';
+         width: @beforeWidth;
+         height: @beforeWidth;
+         position: absolute;
+        top: 0px;
+        left: -@beforeWidth;
     }
     &:hover {
         transform: translateX(0px);
@@ -345,6 +364,51 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+}
+/**
+ * 首页海浪图
+ */
+@keyframes swRotate{
+    0%{
+        transform: rotate(0)
+    }
+    100%{
+        transform: rotate(359deg)
+    }
+}
+.sea-wave{
+    @swHerght:30vh;
+    position: fixed;
+    width:100vw;
+    height: @swHerght;
+    background-color:fadeout(@mainColor2,60%);
+    bottom: 0px;
+    left:0px;
+    @afWidth:340vw;
+    &::after{
+        content: "";
+        position: absolute;
+        width:@afWidth;
+        height: @afWidth;
+        background-color: white;
+        bottom:@swHerght/2;
+        left:-( @afWidth - 100vw )/2;
+        border-radius: 48%;
+        animation: swRotate 13s ease-in;
+        animation-iteration-count:infinite;
+    }
+     &::before{
+        content: "";
+        position: absolute;
+        width:@afWidth;
+        height: @afWidth;
+        background-color: rgba(255, 255, 355, 0.5);
+        bottom:@swHerght/2;
+        left:-( @afWidth - 100vw )/2;
+        border-radius: 48%;
+        animation: swRotate 13s ease-out;
+        animation-iteration-count:infinite;
     }
 }
 /**

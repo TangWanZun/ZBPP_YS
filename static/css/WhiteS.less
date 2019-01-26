@@ -8,13 +8,13 @@
     box-sizing: border-box;
 }
 // 阻止选中
-.ws-global-selectno{
+.ws-global-selectno {
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Chrome/Safari/Opera */
     -khtml-user-select: none; /* Konqueror */
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none; 
+    user-select: none;
 }
 /**
  * ========================
@@ -24,98 +24,102 @@
 //主色
 @mainColor: #3892d3;
 //蒙版背景统一数据
-@keyframes wxModalShow{
-	from{opacity: 0;}
-	to{opacity: 1;}
+@keyframes wxModalShow {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
-.ws-modal-bg{
-    background-color: rgba(0,0,0,0.5);
+.ws-modal-bg {
+    background-color: rgba(0, 0, 0, 0.5);
     position: fixed;
-    top:0px;
-    left:0px;
-    width:100vw;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
     height: 100vh;
     animation: wxModalShow 0.4s ease-in;
 }
 /**
  * loading
  */
-.ws-loading-box{
+.ws-loading-box {
     z-index: 10;
     width: 100vw;
     height: 100vh;
     position: fixed;
-    top:0px;
-    left:0px;
+    top: 0px;
+    left: 0px;
     .ws-global-selectno;
 }
 .ws-loading {
-  position: absolute;
-  top: 50%;
-  left: 40%;
-  margin-left: 10%;
-  transform: translate3d(-50%, -50%, 0);
+    position: absolute;
+    top: 50%;
+    left: 40%;
+    margin-left: 10%;
+    transform: translate3d(-50%, -50%, 0);
 }
 .ws-loading-dot {
-  width: 24px;
-  height: 24px;
-  background: #3ac;
-  border-radius: 100%;
-  display: inline-block;
-  animation: wsSlide 1s infinite;
+    width: 24px;
+    height: 24px;
+    background: #3ac;
+    border-radius: 100%;
+    display: inline-block;
+    animation: wsSlide 1s infinite;
 }
 .ws-loading-dot:nth-child(1) {
-  animation-delay: 0.1s;
-  background: #32aacc;
+    animation-delay: 0.1s;
+    background: #32aacc;
 }
 .ws-loading-dot:nth-child(2) {
-  animation-delay: 0.2s;
-  background: #64aacc;
+    animation-delay: 0.2s;
+    background: #64aacc;
 }
 .ws-loading-dot:nth-child(3) {
-  animation-delay: 0.3s;
-  background: #96aacc;
+    animation-delay: 0.3s;
+    background: #96aacc;
 }
 .ws-loading-dot:nth-child(4) {
-  animation-delay: 0.4s;
-  background: #c8aacc;
+    animation-delay: 0.4s;
+    background: #c8aacc;
 }
 .ws-loading-dot:nth-child(5) {
-  animation-delay: 0.5s;
-  background: #faaacc;
+    animation-delay: 0.5s;
+    background: #faaacc;
 }
 @keyframes wsSlide {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.3;
-    transform: scale(2);
-  }
-  100% {
-    transform: scale(1);
-  }
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.3;
+        transform: scale(2);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 /**
  * toast
  */
-@keyframes wsToastIn{
-    0%{
+@keyframes wsToastIn {
+    0% {
         transform: translateY(-50vh);
     }
-    100%{
+    100% {
         transform: translateY(0vh);
     }
 }
-@keyframes wsToastOut{
-    0%{
+@keyframes wsToastOut {
+    0% {
         transform: translateY(0vh);
     }
-    100%{
+    100% {
         transform: translateY(-50vh);
     }
 }
-.ws-toast{
+.ws-toast {
     position: fixed;
     top: 0px;
     width: 100vw;
@@ -125,27 +129,27 @@
     z-index: 10;
 }
 //类型
-.ws-toast-error>.ws-toast-content{
-    background-color: rgb(220,0,0);
+.ws-toast-error > .ws-toast-content {
+    background-color: rgb(220, 0, 0);
 }
 
-.ws-toast-content{
-    color:white;
+.ws-toast-content {
+    color: white;
     width: 50%;
-    border-radius:0px 0px  3px 3px;
-    padding:8px 30px;
-    border:1px solid rgba(0,0,0,0.1);
-    background-color:#66CD00;
+    border-radius: 0px 0px 3px 3px;
+    padding: 8px 30px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: #66cd00;
     text-align: center;
 }
-.ws-toast-span{
+.ws-toast-span {
     display: inline-block;
     text-align: left;
     font-size: 15px;
-    word-wrap:break-word;
+    word-wrap: break-word;
 }
 // 离开动画
-.ws-toast-none{
+.ws-toast-none {
     animation: wsToastOut 0.35s ease-in;
 }
 /**
@@ -178,15 +182,15 @@ input[type='checkbox'] {
     width: 20px;
     height: 20px;
     background: transparent;
-    border: 2px solid rgba(0,0,0,0.5);
+    border: 2px solid rgba(0, 0, 0, 0.5);
     outline: none;
-    transition:transform 0.3s;
+    transition: transform 0.3s;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-input[type='checkbox']:checked{
-    border:none;
+input[type='checkbox']:checked {
+    border: none;
     transform: rotate(30deg);
 }
 input[type='checkbox']:after {
@@ -217,7 +221,8 @@ input[type='checkbox']:checked:after {
 /**
  * 单个input包裹盒子
  */
-.ws-input-text,.ws-input-select {
+.ws-input-text,
+.ws-input-select {
     display: flex;
     justify-content: space-between;
     align-items: stretch;
@@ -230,9 +235,12 @@ input[type='checkbox']:checked:after {
 /**
  * input
  */
-.ws-input-box{
+.ws-input-box {
     position: absolute;
-    left:0px;right:0px;top:0px;bottom: 0px;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     z-index: -1;
     transition: 0.3s;
@@ -251,30 +259,34 @@ input[type='checkbox']:checked:after {
     font-size: 17px;
 }
 
-@keyframes wsInputBoxAfter{
-    0%{width:0px;}
-    100%{width:100%}
+@keyframes wsInputBoxAfter {
+    0% {
+        width: 0px;
+    }
+    100% {
+        width: 100%;
+    }
 }
 .ws-input-text input:focus + .ws-input-box::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: -1px;
-    left:0px;
+    left: 0px;
     height: 2px;
-    width:100%;
+    width: 100%;
     background-color: @mainColor;
-    animation:wsInputBoxAfter 0.2s;
+    animation: wsInputBoxAfter 0.2s;
 }
 /**
  * 下拉框  select
  */
-.ws-input-select{
-    select{
+.ws-input-select {
+    select {
         outline: none;
         flex-grow: 1;
         padding: 0 14px;
         font-size: 17px;
-        width:100%;
+        width: 100%;
         //清除select聚焦时候的边框颜色
         outline: none;
         //隐藏select的下拉图标
@@ -283,7 +295,8 @@ input[type='checkbox']:checked:after {
         // -moz-appearance: none;
     }
 }
-.ws-input-text:hover>.ws-input-box , .ws-input-select:hover > .ws-input-box{
+.ws-input-text:hover > .ws-input-box,
+.ws-input-select:hover > .ws-input-box {
     border-bottom: 1px solid @mainColor;
 }
 /**
@@ -292,12 +305,26 @@ input[type='checkbox']:checked:after {
 .ws-page-box {
     .ws-global-selectno;
     display: flex;
-    > div {
-        padding: 0 20px;
-    }
     .ws-page-box-click {
         cursor: pointer;
         color: @mainColor;
+        transition: 0.2s;
+        &:hover{
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+    }
+}
+.ws-page-box-item{
+    padding: 5px 15px;
+    border:1px solid rgb(224, 224, 224);
+    margin-left: -1px;
+
+    &:first-child{
+        border-radius:5px 0 0 5px;
+        margin-left: 0px;
+    }
+    &:last-child{
+        border-radius:0 5px 5px 0;
     }
 }
 /**
@@ -328,23 +355,27 @@ input[type='checkbox']:checked:after {
 }
 /**
  *  模态框
- */ 
+ */
 //添加动效
 
-@keyframes wxModalHidden{
-	from{opacity: 1;}
-	to{opacity: 0;}
+@keyframes wxModalHidden {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
 }
-@keyframes wxModalBoxShow{
-	from{
+@keyframes wxModalBoxShow {
+    from {
         transform: translateY(30vh) scaleX(0.3);
     }
-	to{
+    to {
         transform: translateY(0) scaleX(1);
     }
 }
 // 基本组件
-.ws-modal{
+.ws-modal {
     z-index: 9;
     display: flex;
     justify-content: center;
@@ -352,156 +383,159 @@ input[type='checkbox']:checked:after {
     animation: wxModalShow 0.4s ease-in;
     .ws-modal-bg;
     // 存放内容的div
-    .ws-modal-box{
+    .ws-modal-box {
         //浏览器存在上边框，保持div大概在中间位置
         margin-bottom: 15vh;
-        width:500px;
+        width: 500px;
         min-height: 200px;
         max-height: 80vh;
         background-color: white;
-        border-radius:3px;
-        box-shadow: 0 10px 15px 1px rgba(0,0,0,0.3);
+        border-radius: 3px;
+        box-shadow: 0 10px 15px 1px rgba(0, 0, 0, 0.3);
         display: flex;
         justify-content: space-between;
         align-items: stretch;
         flex-direction: column;
         animation: wxModalBoxShow 0.3s ease-in;
         //头部标题
-        .wx-modal-head{
+        .wx-modal-head {
             font-size: 25px;
-            padding:20px 20px;
+            padding: 20px 20px;
             padding-bottom: 10px;
             flex-shrink: 0;
         }
         //modal内容
-        .wx-modal-content{
+        .wx-modal-content {
             flex-grow: 1;
-            padding:0 20px;
+            padding: 0 20px;
             font-size: 17px;
+            overflow: auto;
         }
         // 内容底部,用于放置按钮
-        .ws-modal-foot{
+        .ws-modal-foot {
             flex-shrink: 0;
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            background-color: rgba(0,0,0,0.03);
-            padding:5px 5px;
+            background-color: rgba(0, 0, 0, 0.03);
+            padding: 5px 5px;
             // 底部按钮
-            .ws-modal-foot-item{
-                padding:10px 40px;
+            .ws-modal-foot-item {
+                padding: 10px 40px;
                 border-radius: 3px;
                 cursor: default;
                 transition: 0.3s;
                 .ws-global-selectno;
-                &:hover{
-                    background-color: rgba(0,0,0,0.08);
+                &:hover {
+                    background-color: rgba(0, 0, 0, 0.08);
                 }
-                &:active{
-                    background-color: rgba(0,0,0,0.2);
+                &:active {
+                    background-color: rgba(0, 0, 0, 0.2);
                     transform: scale(0.95);
                 }
             }
-        } 
+        }
     }
 }
-.ws-modal-hidden{
-    animation:wxModalHidden 0.2s;
+.ws-modal-hidden {
+    animation: wxModalHidden 0.2s;
     opacity: 0;
 }
 /**
  * 侧边标签栏
  */
-@keyframes wxSideconBoxShow{
-	from{
+@keyframes wxSideconBoxShow {
+    from {
         transform: translateY(100vh);
     }
-	to{
+    to {
         transform: translateY(0);
     }
 }
-@keyframes wxSideconBoxHidden{
-	from{
+@keyframes wxSideconBoxHidden {
+    from {
         transform: translateY(0);
     }
-	to{
+    to {
         transform: translateY(~'calc( 100vh - 80px )');
     }
 }
-.ws-sidecon{
+.ws-sidecon {
     position: fixed;
-    left:0px;
+    left: 0px;
     bottom: 0px;
-    width:100%;
-    padding:0 20px;
+    width: 100%;
+    padding: 0 20px;
     transition: 0.2s;
     // display: none;
-    .ws-sidecon-bg{
+    .ws-sidecon-bg {
         .ws-modal-bg;
     }
-    .ws-sidecon-box{
+    .ws-sidecon-box {
         animation: wxSideconBoxShow 0.3s;
     }
     //顶部栏
-    .ws-sidecon-head{
+    .ws-sidecon-head {
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
-        .ws-sidecon-head-close{
+        .ws-sidecon-head-close {
             flex-shrink: 0;
-            width:50px;
+            width: 50px;
             height: 50px;
             cursor: pointer;
-            .ws-sidecon-label-close{
-                width:100%;
+            .ws-sidecon-label-close {
+                width: 100%;
                 height: 100%;
-                &::after,&::before{
+                &::after,
+                &::before {
                     background-color: white;
-                    width:20px;
+                    width: 20px;
                     height: 3px;
                 }
-                &:hover::before,&:hover::after{
-                    box-shadow: 0px 0px 5px 1px rgba(255,255,255,0.5);
+                &:hover::before,
+                &:hover::after {
+                    box-shadow: 0px 0px 5px 1px rgba(255, 255, 255, 0.5);
                 }
             }
         }
         //标签栏
-        .ws-sidecon-label-box{
+        .ws-sidecon-label-box {
             flex-grow: 1;
             position: relative;
             display: flex;
-            @labelShowHeight:10px;
-            .ws-sidecon-label{
+            @labelShowHeight: 10px;
+            .ws-sidecon-label {
                 .ws-global-selectno;
-                border-top:1px solid rgba(0,0,0,0.1);
-                border-left:1px solid rgba(0,0,0,0.1);
-                border-right:1px solid rgba(0,0,0,0.1);
-                padding:10px 10px @labelShowHeight+5px 20px;
+                border-top: 1px solid rgba(0, 0, 0, 0.1);
+                border-left: 1px solid rgba(0, 0, 0, 0.1);
+                border-right: 1px solid rgba(0, 0, 0, 0.1);
+                padding: 10px 10px @labelShowHeight+5px 20px;
                 margin-bottom: -@labelShowHeight;
                 border-radius: 5px 5px 0 0;
                 cursor: pointer;
                 background-color: white;
                 display: flex;
                 align-items: center;
-                box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.1);
+                box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.1);
                 background-color: rgb(245, 245, 245);
-                &>span{
+                & > span {
                     display: block;
                 }
                 transition: transform 0.2s;
             }
             //选中状态
-            .ws-sidecon-label-select{
+            .ws-sidecon-label-select {
                 position: relative;
                 z-index: 2;
                 transform: translateY(-@labelShowHeight+1px);
-                box-shadow: -1px -3px 5px 1px rgba(0,0,0,0.05);
+                box-shadow: -1px -3px 5px 1px rgba(0, 0, 0, 0.05);
                 background-color: white;
             }
         }
-        .ws-sidecon-label-close{
+        .ws-sidecon-label-close {
             transition: 0.2s;
-            width:20px;
+            width: 20px;
             height: 20px;
             margin-left: 10px;
             transform: rotate(45deg);
@@ -509,39 +543,40 @@ input[type='checkbox']:checked:after {
             display: flex;
             justify-content: center;
             align-items: center;
-            &::after{
-                content:"";
+            &::after {
+                content: '';
                 position: absolute;
-                width:10px;
+                width: 10px;
                 height: 2px;
                 background-color: black;
                 transform: rotate(90deg);
                 border-radius: 2px;
                 transition: 0.3;
             }
-            &::before{
-                content:"";
+            &::before {
+                content: '';
                 position: absolute;
-                width:10px;
+                width: 10px;
                 height: 2px;
                 background-color: black;
                 border-radius: 2px;
                 transition: 0.3;
             }
-            &:hover::before,&:hover::after{
-                box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.5);
+            &:hover::before,
+            &:hover::after {
+                box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.5);
             }
         }
     }
     // 内容承载器
-    .ws-sidecon-content-box{
-        box-shadow: 0px -3px 10px 1px rgba(0,0,0,0.1);
+    .ws-sidecon-content-box {
+        box-shadow: 0px -3px 10px 1px rgba(0, 0, 0, 0.1);
         border-radius: 3px;
-        border:1px solid rgba(0,0,0,0.1);
+        border: 1px solid rgba(0, 0, 0, 0.1);
         background-color: white;
-        height:~'calc( 100vh - 80px )';
+        height: ~'calc( 100vh - 80px )';
         position: relative;
-        .ws-sidecon-content{
+        .ws-sidecon-content {
             display: none;
             width: 100%;
             height: 100%;
@@ -550,16 +585,40 @@ input[type='checkbox']:checked:after {
     }
 }
 // 隐藏
-.ws-sidecon-hidden{
+.ws-sidecon-hidden {
     // transform: translateY(50vh);
     animation: wxSideconBoxHidden 0.3s;
     transform: translateY(~'calc( 100vh - 80px )');
-    >.ws-sidecon-box{
-//         animation: wxSideconBoxHidden 0.3s;
-//         transform: translateY(~'calc( 100vh - 80px )');
+    > .ws-sidecon-box {
+        //         animation: wxSideconBoxHidden 0.3s;
+        //         transform: translateY(~'calc( 100vh - 80px )');
     }
-    >.ws-sidecon-bg{
+    > .ws-sidecon-bg {
         // transition: 0.3s;
         opacity: 0;
+    }
+}
+/**
+ * 滚动条修改
+ */
+body,div{
+    &::-webkit-scrollbar {
+        width: 8px;
+        background: white;
+    }
+    &::-webkit-scrollbar-corner, /* 滚动条角落 */
+    &::-webkit-scrollbar-thumb,
+    &::-webkit-scrollbar-track {
+        border-radius: 4px;
+    }
+    &::-webkit-scrollbar-corner,
+    &::-webkit-scrollbar-track {
+        /* 滚动条轨道 */
+        background-color: rgba(180, 160, 120, 0.1);
+        box-shadow: inset 0 0 1px rgba(180, 160, 120, 0.5);
+    }
+    &::-webkit-scrollbar-thumb {
+        /* 滚动条手柄 */
+        background-color:fadeout(@mainColor, 50%);
     }
 }

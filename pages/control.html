@@ -11,7 +11,7 @@
 	<body>
         <div class="control-user">
         	<span class="btn" id="adminInfoModify">密码<br/>修改</span>
-        	<span class="btn" id="adminInfoModify2">退出<br/>登录</span>
+        	<span class="btn" id="adminSignOut">退出<br/>登录</span>
         </div>
         <div class="main-box ">
             <div class="main" style="margin:0 50px;width:100%">
@@ -19,20 +19,24 @@
                     <div class="table">
                         <table id="cmpTable" border="0">
                         	<tr class="table-tr">
-                        	    <th>公司名称</th>
+                        	    <th style="min-width:100px;">公司名称</th>
                         	    <th>介绍</th>
-                        	    <th>联系电话</th>
+                        	    <th style="min-width:100px;">联系电话</th>
                         	    <th>地址</th>
-                        	    <th>登录用户名</th>
-                        	    <th>操作</th>
+                        	    <th style="min-width:110px;">登录用户名</th>
+                        	    <th style="min-width:100px;">状态</th>
+                        	    <th style="min-width: 155px;">操作</th>
                         	</tr>
                         </table>
                     </div>
                 </div>
-                <div id="page">
+                <div id="page" style="margin-top:30px;">
                 </div>
             </div>
         </div>
 	</body>
-    <script src="../static/js/control.js" type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript">
+    window.$state = '@ViewData["state"]';
+  </script>
+  <script src="../static/js/control.js" type="text/javascript" charset="utf-8"></script>
 </html>
